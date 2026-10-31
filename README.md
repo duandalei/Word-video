@@ -8,7 +8,7 @@
 
 每个单词都是一张互动卡片：点击词卡、点击画面，或按 ▶，页面会用浏览器英文语音朗读单词，同时播放与词义对应的动画。适合孩子、英语初学者或课堂演示使用。
 
-- 7 个主题故事，共 95 个单词
+- 6 个主题故事，共 87 个单词
 - 每个词都有动画、IPA 音标和中文释义
 - 支持慢速朗读、全部连读、键盘切换
 - 适配手机和桌面，支持深色模式与减少动态效果
@@ -24,7 +24,6 @@
 | L2 I have a pet cat | 小猫的一天 | 13 | [打开](https://duandalei.github.io/Word-video/l2-i-have-a-pet-cat.html) |
 | L1 Let’s go to the supermarket | 从种子到大树 | 13 | [打开](https://duandalei.github.io/Word-video/L1%20Let%E2%80%99s%20go%20to%20the%20supermarket.html) |
 | A Day at the Zoo | 动物园的一天 | 11 | [打开](https://duandalei.github.io/Word-video/zoo.html) |
-| Fruit Words | 水果形容词 | 8 | [打开](https://duandalei.github.io/Word-video/fruit-words.html) |
 
 ## 怎么用
 
@@ -47,7 +46,6 @@
 ├── l2-i-have-a-pet-cat.html      # L2 I have a pet cat
 ├── L1 Let’s go to the supermarket.html  # L1 Let’s go to the supermarket
 ├── zoo.html              # A Day at the Zoo
-├── fruit-words.html      # Fruit Words
 ├── CLAUDE.md             # 项目协作说明
 └── .gitignore
 ```
