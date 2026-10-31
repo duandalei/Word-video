@@ -1,0 +1,625 @@
+<title>From Seed to Tree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;900&display=swap">
+<style>
+/* ── Design plan ────────────────────────────────────────────────
+   Subject: 13 words that are one story — an apple seed grows into
+            a tree. The stage emoji grows with the story (--art-scale)
+   Color  : warm paper ground + ink that stays brown-biased;
+            the accent is re-tinted per stage, seed-brown → leaf →
+            blossom → sky, so the rail reads as a season changing
+   Type   : Baloo 2 (rounded display: word, title)
+            Nunito (UI, labels, Chinese gloss)
+   Layout : one centered column — word rail, reading stage, controls
+   ─────────────────────────────────────────────────────────────── */
+:root{
+  --bg:#FFF6EA;
+  --bg-glow:#FFE7CC;
+  --surface:#FFFDFA;
+  --surface-2:#FFF4E6;
+  --ink:#2C2119;
+  --ink-soft:#8A7563;
+  --line:#EEDCC6;
+  --accent:#E5484D;
+  --accent-ink:#C42A30;
+  --accent-soft:rgba(229,72,77,.16);
+  --shadow:0 20px 44px -22px rgba(122,80,40,.5), 0 2px 6px rgba(122,80,40,.07);
+  --r-card:26px;
+  --r-ctl:16px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16120F;
+    --bg-glow:#241A12;
+    --surface:#221B15;
+    --surface-2:#2A211A;
+    --ink:#F8EFE5;
+    --ink-soft:#B09C89;
+    --line:#3B2F25;
+    --accent-ink:var(--accent);
+    --accent-soft:rgba(229,72,77,.22);
+    --shadow:0 20px 44px -22px rgba(0,0,0,.8), 0 2px 6px rgba(0,0,0,.45);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16120F;
+  --bg-glow:#241A12;
+  --surface:#221B15;
+  --surface-2:#2A211A;
+  --ink:#F8EFE5;
+  --ink-soft:#B09C89;
+  --line:#3B2F25;
+  --accent-ink:var(--accent);
+  --accent-soft:rgba(229,72,77,.22);
+  --shadow:0 20px 44px -22px rgba(0,0,0,.8), 0 2px 6px rgba(0,0,0,.45);
+  color-scheme: dark;
+}
+
+html{height:100%}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding-block:18px;
+  padding-inline:16px;
+  font-family:'Nunito',system-ui,-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  font-size:15px;
+  color:var(--ink);
+  background:
+    radial-gradient(900px 420px at 50% -8%, var(--bg-glow), transparent 72%),
+    var(--bg);
+  background-attachment:fixed;
+  min-height:100%;
+  display:flex;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.app{width:100%;max-width:720px;margin-block:auto;display:flex;flex-direction:column;gap:14px}
+
+/* ── Header ─────────────────────────────────────────── */
+.head{display:flex;align-items:flex-end;justify-content:flex-end;gap:12px;padding-inline:4px}
+.prog{
+  font-weight:900;
+  font-size:13px;
+  letter-spacing:1px;
+  color:var(--ink-soft);
+  font-variant-numeric:tabular-nums;
+  padding-bottom:4px;
+  white-space:nowrap;
+}
+
+/* ── Word rail ──────────────────────────────────────── */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  font:inherit;
+  font-weight:900;
+  font-size:14px;
+  line-height:1;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:9px 13px;
+  min-height:40px;
+  border:1.5px solid var(--line);
+  border-radius:999px;
+  background:var(--surface);
+  color:var(--ink-soft);
+  cursor:pointer;
+  touch-action:manipulation;
+  transition:transform .16s ease, color .16s ease, background .16s ease, border-color .16s ease;
+}
+.chip:hover{border-color:var(--chip-c,var(--accent));color:var(--ink);transform:translateY(-2px)}
+.chip.on{
+  background:var(--chip-c,var(--accent));
+  border-color:var(--chip-c,var(--accent));
+  color:#fff;
+  box-shadow:0 10px 20px -12px var(--chip-c,var(--accent));
+}
+.chip .em{font-size:15px;line-height:1}
+
+/* ── Stage card ─────────────────────────────────────── */
+.card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  padding:16px 16px 22px;
+  border:1.5px solid var(--line);
+  border-radius:var(--r-card);
+  background:
+    radial-gradient(460px 190px at 50% -40px, var(--accent-soft), transparent 72%),
+    var(--surface);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.card.enter{animation:cardIn .42s cubic-bezier(.22,1.2,.42,1) both}
+@keyframes cardIn{from{opacity:.35;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+
+/* fruit */
+.fruit-wrap{
+  position:relative;
+  display:grid;
+  place-items:center;
+  height:clamp(132px,24vh,190px);
+}
+.glow{
+  position:absolute;
+  width:180px;height:180px;
+  border-radius:50%;
+  background:var(--accent);
+  opacity:.18;
+  filter:blur(40px);
+  transition:background .3s ease;
+}
+.fruit{
+  position:relative;
+  font-size:calc(clamp(74px,19vw,118px) * var(--art-scale,1));
+  line-height:1;
+  cursor:pointer;
+  user-select:none;
+  touch-action:manipulation;
+  filter:drop-shadow(0 16px 20px rgba(60,30,10,.22));
+  transform-origin:50% 62%;
+  transition:filter .2s ease;
+}
+.fruit:hover{filter:drop-shadow(0 18px 24px rgba(60,30,10,.3))}
+.fruit-sm{
+  position:absolute;
+  right:12%;
+  bottom:10%;
+  font-size:40px;
+  line-height:1;
+  transform-origin:50% 60%;
+  filter:drop-shadow(0 8px 10px rgba(60,30,10,.2));
+}
+.fruit-sm::after{
+  content:attr(data-label);
+  position:absolute;
+  left:50%;top:100%;
+  transform:translateX(-50%);
+  font-family:'Nunito',sans-serif;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.fruit-sm[hidden]{display:none}
+
+/* one motion per stage of growth, applied to .fruit and .fruit-sm */
+.fruit.anim-drop{animation:dropIn 1s cubic-bezier(.3,1.25,.5,1) both}
+@keyframes dropIn{0%{transform:translateY(-46px) scale(.7);opacity:0}60%{transform:translateY(5px) scale(1);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
+.fruit.anim-sprout{animation:sproutUp 1.4s cubic-bezier(.2,1.15,.4,1) both}
+@keyframes sproutUp{0%{transform:translateY(34px) scale(.45);opacity:0}55%{opacity:1}75%{transform:translateY(-5px) scale(1.06)}100%{transform:translateY(0) scale(1)}}
+.fruit.anim-pop{animation:popIn .9s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes popIn{0%{transform:scale(.3);opacity:0}55%{transform:scale(1.22);opacity:1}75%{transform:scale(.95)}100%{transform:scale(1)}}
+.fruit.anim-sway{animation:sway 2.4s ease-in-out 2}
+@keyframes sway{0%,100%{transform:rotate(-5deg) translateX(-6px)}50%{transform:rotate(5deg) translateX(6px)}}
+.fruit.anim-grow{animation:grow 1.5s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes grow{0%{transform:scale(.62)}50%{transform:scale(1.28)}68%{transform:scale(1.12)}100%{transform:scale(1.2)}}
+.fruit-sm.anim-shrink{animation:shrink 1.2s cubic-bezier(.2,1,.4,1) both}
+@keyframes shrink{from{transform:scale(1)}to{transform:scale(.62)}}
+.fruit.anim-bloom{animation:bloom 1.6s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes bloom{0%{transform:scale(.5) rotate(-24deg);opacity:0}60%{transform:scale(1.14) rotate(6deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+.fruit.anim-beat{animation:beat 1.5s ease-in-out 2}
+@keyframes beat{0%,100%{transform:scale(1)}18%{transform:scale(1.16)}34%{transform:scale(1)}52%{transform:scale(1.11)}70%{transform:scale(1)}}
+.fruit.anim-shine{animation:shine 2s ease-in-out 2}
+@keyframes shine{0%,100%{transform:scale(1) rotate(0);filter:drop-shadow(0 16px 20px rgba(60,30,10,.22))}50%{transform:scale(1.13) rotate(10deg);filter:drop-shadow(0 0 26px rgba(245,179,1,.85))}}
+.fruit.anim-breathe{animation:breathe 3.2s ease-in-out 2}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* particles */
+.fx{position:absolute;inset:0;pointer-events:none}
+.fx i{
+  position:absolute;
+  left:50%;top:52%;
+  font-style:normal;
+  font-size:24px;
+  opacity:0;
+  animation:fxUp .95s cubic-bezier(.2,.8,.3,1) forwards;
+}
+@keyframes fxUp{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(0)}
+  22%{opacity:1}
+  100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.15) rotate(var(--rot))}
+}
+
+/* ── Word meta ──────────────────────────────────────── */
+.meta{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:9px;
+  padding:6px 4px 10px;
+  text-align:center;
+  font-weight:700;
+  color:var(--ink-soft);
+}
+.meta .w{
+  font-family:'Baloo 2','Nunito',system-ui,sans-serif;
+  font-weight:800;
+  font-size:clamp(28px,7.5vw,44px);
+  line-height:1.15;
+  color:var(--accent-ink);
+}
+.meta .ipa{font-size:14px;letter-spacing:.4px}
+.meta .cn{
+  font-size:14px;
+  font-weight:900;
+  padding:4px 11px;
+  border-radius:999px;
+  background:var(--accent-soft);
+  color:var(--accent-ink);
+}
+
+/* ── Controls ───────────────────────────────────────── */
+.ctrls{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.btn{
+  font:inherit;
+  font-weight:900;
+  font-size:15px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:48px;
+  padding:0 18px;
+  border:1.5px solid var(--line);
+  border-radius:var(--r-ctl);
+  background:var(--surface);
+  color:var(--ink);
+  cursor:pointer;
+  touch-action:manipulation;
+  transition:transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+}
+.btn:hover{transform:translateY(-2px);border-color:var(--accent)}
+.btn:active{transform:translateY(0) scale(.975)}
+.btn.primary{
+  background:var(--accent-ink);
+  border-color:var(--accent-ink);
+  color:#fff;
+  box-shadow:0 12px 24px -14px var(--accent-ink);
+}
+.btn.primary:hover{border-color:var(--accent-ink)}
+.btn.icon{padding:0 15px;font-size:19px}
+.btn[aria-pressed="true"]{
+  background:var(--accent-soft);
+  border-color:var(--accent);
+  color:var(--accent-ink);
+}
+.btn:focus-visible,.chip:focus-visible,.fruit:focus-visible{
+  outline:3px solid var(--accent);
+  outline-offset:2px;
+}
+
+/* ── Coach mark ─────────────────────────────────────── */
+.coach{
+  position:absolute;
+  left:50%;bottom:-4px;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 14px;
+  border-radius:999px;
+  background:var(--accent-ink);
+  color:#fff;
+  font-size:13.5px;
+  font-weight:900;
+  white-space:nowrap;
+  box-shadow:0 14px 26px -14px rgba(0,0,0,.6);
+  animation:coachIn .5s .35s both;
+  z-index:5;
+}
+.coach .hand{display:inline-block;font-size:17px;animation:tap 1.1s ease-in-out infinite}
+@keyframes tap{0%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+@keyframes coachIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+.coach.gone{display:none}
+
+@media (max-width:420px){
+  :root{--r-card:22px}
+  .chip{font-size:13px;padding:8px 11px}
+  .meta .w{font-size:clamp(26px,8vw,34px)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.06s !important}
+  .fx{display:none}
+}
+</style>
+
+<div class="app">
+  <div class="head">
+    <div class="prog" id="prog">1 / 13</div>
+  </div>
+
+  <nav class="chips" id="chips" aria-label="选择单词"></nav>
+
+  <main class="card" id="card">
+    <div class="fruit-wrap">
+      <div class="glow"></div>
+      <div class="fruit" id="fruit" role="button" tabindex="0" aria-label="点击朗读单词">🍎</div>
+      <div class="fruit-sm" id="fruitSm" data-label="small" hidden>🍋</div>
+      <div class="fx" id="fx"></div>
+    </div>
+
+    <div class="meta">
+      <span class="w" id="mWord">round</span>
+      <span class="ipa" id="mIpa">/raʊnd/</span>
+      <span class="cn" id="mCn">圆的</span>
+    </div>
+
+    <div class="coach" id="coach"><span class="hand">👆</span>点图片或 ▶ 听单词发音</div>
+  </main>
+
+  <div class="ctrls">
+    <button class="btn primary" id="play"><span>▶</span>读单词</button>
+    <button class="btn icon" id="prev" aria-label="上一个">←</button>
+    <button class="btn icon" id="next" aria-label="下一个">→</button>
+    <button class="btn" id="slow" aria-pressed="false">🐢 慢速</button>
+    <button class="btn" id="all" aria-pressed="false">🔁 全部连读</button>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var LESSONS = [
+    { word:"apple seeds",    ipa:"/ˈæpl siːdz/",    cn:"苹果籽",     fruit:"🍎",    scale:.82, color:"#E5484D", ink:"#C0272D", anim:"drop",    fx:["🌰","✨","🍎"] },
+    { word:"start",          ipa:"/stɑːrt/",        cn:"开始",       fruit:"🌱",    scale:.62, color:"#B0733C", ink:"#7E4E22", anim:"sprout",  fx:["✨","🌱","💫"] },
+    { word:"sprout",         ipa:"/spraʊt/",        cn:"发芽；嫩芽", fruit:"🌱",    scale:.78, color:"#7CB342", ink:"#4E7A22", anim:"sprout",  fx:["🌱","✨","💚"] },
+    { word:"tiny",           ipa:"/ˈtaɪni/",        cn:"微小的",     fruit:"🌱",    scale:.46, color:"#A5CE4E", ink:"#5F7A1C", anim:"pop",     fx:["✨","💫"] },
+    { word:"sapling",        ipa:"/ˈsæplɪŋ/",       cn:"树苗",       fruit:"🪴",    scale:.88, color:"#4CAF50", ink:"#2E7D32", anim:"sway",    fx:["🌿","✨","💚"] },
+    { word:"young and thin", ipa:"/jʌŋ ənd θɪn/",   cn:"幼小纤细",   fruit:"🌿",    scale:.82, color:"#66BB6A", ink:"#357A38", anim:"sway",    fx:["🌿","🍃","✨"] },
+    { word:"tall and strong",ipa:"/tɔːl ənd strɔːŋ/",cn:"高大强壮",  fruit:"🌳",    scale:1,   color:"#2E7D32", ink:"#1B5E20", anim:"grow",    fx:["✨","🌳","💪"] },
+    { word:"lots of leaves", ipa:"/lɑːts əv liːvz/",cn:"许多叶子",   fruit:"🍃🍃🍃", chip:"🍃", scale:.62, color:"#43A047", ink:"#2E6E32", anim:"sway",    fx:["🍃","🌿","✨"] },
+    { word:"pretty",         ipa:"/ˈprɪti/",        cn:"漂亮的",     fruit:"🌸",    scale:.92, color:"#EC6BA8", ink:"#B93B7A", anim:"bloom",   fx:["🌸","💕","✨"] },
+    { word:"soil",           ipa:"/sɔɪl/",          cn:"土壤",       fruit:"🟤",    scale:.78, color:"#9C6B45", ink:"#6E4728", anim:"drop",    fx:["💧","✨","🟤"] },
+    { word:"alive",          ipa:"/əˈlaɪv/",        cn:"有生命的",   fruit:"💚",    scale:.92, color:"#00897B", ink:"#00695C", anim:"beat",    fx:["💚","✨","💫"] },
+    { word:"sunshine",       ipa:"/ˈsʌnʃaɪn/",      cn:"阳光",       fruit:"☀️",    scale:1,   color:"#F5B301", ink:"#9A6B00", anim:"shine",   fx:["☀️","✨","🌟"] },
+    { word:"breathe",        ipa:"/briːð/",         cn:"呼吸",       fruit:"💨",    scale:.92, color:"#4FA8D8", ink:"#256E9C", anim:"breathe", fx:["💨","✨","🌬️"] }
+  ];
+
+  var root = document.documentElement;
+  var $ = function(id){ return document.getElementById(id); };
+  var elChips = $("chips"), elCard = $("card"), elFruit = $("fruit"), elFruitSm = $("fruitSm"),
+      elFx = $("fx"),
+      elWord = $("mWord"), elIpa = $("mIpa"), elCn = $("mCn"), elProg = $("prog"),
+      elPlay = $("play"), elCoach = $("coach");
+
+  var idx = 0, slow = false, autoAll = false;
+  var curUtt = null, coached = false;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ── speech ─────────────────────────────────────── */
+  var hasSpeech = ("speechSynthesis" in window) && ("SpeechSynthesisUtterance" in window);
+  var voices = [];
+
+  function loadVoices(){
+    if(!hasSpeech) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if(hasSpeech && window.speechSynthesis.onvoiceschanged !== undefined){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+
+  var PREFERRED = ["Google US English","Samantha","Karen","Microsoft Aria Online (Natural) - English (United States)",
+                   "Microsoft Aria","Microsoft Jenny","Microsoft Zira","Microsoft Michelle","Daniel","Alex"];
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    if(!voices.length) return null;
+    var en = voices.filter(function(v){ return /^en(-|_|$)/i.test(v.lang || ""); });
+    if(!en.length) en = voices;
+    for(var i=0;i<PREFERRED.length;i++){
+      for(var j=0;j<en.length;j++){
+        if((en[j].name || "").indexOf(PREFERRED[i]) === 0) return en[j];
+      }
+    }
+    for(var k=0;k<en.length;k++){ if(/^en[-_]US/i.test(en[k].lang || "")) return en[k]; }
+    return en[0];
+  }
+
+  function rate(){ return slow ? 0.62 : 0.86; }
+
+  function utter(text, r){
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US";
+    u.rate = r;
+    u.pitch = 1.05;
+    u.volume = 1;
+    var v = pickVoice();
+    if(v) u.voice = v;
+    return u;
+  }
+
+  function cancelSpeech(){
+    if(!hasSpeech) return;
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+    curUtt = null;
+  }
+
+  /* ── reading ────────────────────────────────────── */
+  var wordActive = false;
+
+  function stopAll(){
+    wordActive = false;
+    cancelSpeech();
+  }
+
+  function finishWord(){
+    wordActive = false;
+    cancelSpeech();
+    if(autoAll){
+      setTimeout(function(){
+        if(!autoAll || wordActive) return;
+        var n = (idx + 1) % LESSONS.length;
+        if(n === 0){ setAuto(false); }
+        show(n, true);
+      }, 700);
+    }
+  }
+
+  function readWord(){
+    stopAll();
+    var L = LESSONS[idx];
+    wordActive = true;
+
+    playAnim(L);
+
+    if(!hasSpeech){ finishWord(); return; }
+
+    var u = utter(L.word, rate());
+    var gotStart = false;
+    u.onstart = function(){ gotStart = true; };
+    u.onend = function(){ if(wordActive) finishWord(); };
+    u.onerror = function(){ if(wordActive) finishWord(); };
+    curUtt = u;
+
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+    window.speechSynthesis.speak(u);
+
+    /* 合成器不发声时（无可用语音）也继续往下走 */
+    setTimeout(function(){
+      if(wordActive && !gotStart){ cancelSpeech(); finishWord(); }
+    }, 1600);
+  }
+
+  /* ── animation ──────────────────────────────────── */
+  function playAnim(L){
+    elFruit.className = "fruit";
+    elFruitSm.className = "fruit-sm";
+    void elFruit.offsetWidth;
+    elFruit.classList.add("anim-" + L.anim);
+    if(L.anim === "grow" && !elFruitSm.hidden) elFruitSm.classList.add("anim-shrink");
+    if(typeof L.anim === "string") spawnFx(L.fx);
+  }
+
+  function spawnFx(list){
+    if(reduced || !list || !list.length) return;
+    for(var i=0;i<7;i++){
+      (function(i){
+        setTimeout(function(){
+          var s = document.createElement("i");
+          s.textContent = list[i % list.length];
+          s.style.setProperty("--dx", (Math.random()*220 - 110).toFixed(0) + "px");
+          s.style.setProperty("--dy", (-60 - Math.random()*110).toFixed(0) + "px");
+          s.style.setProperty("--rot", (Math.random()*80 - 40).toFixed(0) + "deg");
+          s.style.setProperty("font-size", (17 + Math.random()*13).toFixed(0) + "px");
+          elFx.appendChild(s);
+          setTimeout(function(){ if(s.parentNode) s.parentNode.removeChild(s); }, 1100);
+        }, i * 85);
+      })(i);
+    }
+  }
+
+  /* ── render a lesson ────────────────────────────── */
+  function show(i, autoplay){
+    stopAll();
+    idx = (i + LESSONS.length) % LESSONS.length;
+    var L = LESSONS[idx];
+
+    root.style.setProperty("--accent", L.color);
+    root.style.setProperty("--accent-ink", L.ink);
+    root.style.setProperty("--accent-soft", hexA(L.color, .16));
+    root.style.setProperty("--art-scale", L.scale || 1);   /* 植株随故事长大 */
+
+    for(var c=0;c<elChips.children.length;c++){
+      elChips.children[c].classList.toggle("on", c === idx);
+      elChips.children[c].setAttribute("aria-current", c === idx ? "true" : "false");
+    }
+
+    elFruit.className = "fruit";
+    elFruit.textContent = L.fruit;
+    elFruitSm.className = "fruit-sm";
+    if(L.small){ elFruitSm.textContent = L.small; elFruitSm.hidden = false; }
+    else { elFruitSm.hidden = true; }
+
+    elWord.textContent = L.word;
+    elIpa.textContent = L.ipa;
+    elCn.textContent = L.cn;
+    elProg.textContent = (idx + 1) + " / " + LESSONS.length;
+
+    elCard.classList.remove("enter");
+    void elCard.offsetWidth;
+    elCard.classList.add("enter");
+
+    playAnim(L);
+
+    if(autoplay) setTimeout(function(){ if(!wordActive) readWord(); }, 380);
+  }
+
+  function hexA(hex, a){
+    var h = hex.replace("#", "");
+    if(h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    var n = parseInt(h, 16);
+    return "rgba(" + ((n>>16)&255) + "," + ((n>>8)&255) + "," + (n&255) + "," + a + ")";
+  }
+
+  /* ── controls ───────────────────────────────────── */
+  function buildChips(){
+    LESSONS.forEach(function(L, i){
+      var b = document.createElement("button");
+      b.className = "chip";
+      b.type = "button";
+      b.style.setProperty("--chip-c", L.ink);
+      b.innerHTML = '<span class="em">' + (L.chip || L.fruit) + "</span>" + L.word;
+      b.addEventListener("click", function(){ dismissCoach(); show(i, true); });
+      elChips.appendChild(b);
+    });
+  }
+
+  function dismissCoach(){
+    if(coached) return;
+    coached = true;
+    elCoach.classList.add("gone");
+  }
+
+  function setSlow(v){
+    slow = v;
+    $("slow").setAttribute("aria-pressed", v ? "true" : "false");
+  }
+  function setAuto(v){
+    autoAll = v;
+    $("all").setAttribute("aria-pressed", v ? "true" : "false");
+  }
+
+  buildChips();
+  show(0, false);
+
+  elPlay.addEventListener("click", function(){ dismissCoach(); readWord(); });
+  elFruit.addEventListener("click", function(){ dismissCoach(); readWord(); });
+  elFruit.addEventListener("keydown", function(e){
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); dismissCoach(); readWord(); }
+  });
+  $("prev").addEventListener("click", function(){ dismissCoach(); show(idx - 1, true); });
+  $("next").addEventListener("click", function(){ dismissCoach(); show(idx + 1, true); });
+  $("slow").addEventListener("click", function(){ dismissCoach(); setSlow(!slow); });
+  $("all").addEventListener("click", function(){
+    dismissCoach();
+    var v = !autoAll;
+    setAuto(v);
+    if(v) readWord(); else stopAll();
+  });
+
+  document.addEventListener("click", dismissCoach, { once:true });
+
+  document.addEventListener("keydown", function(e){
+    var tag = (e.target && e.target.tagName) || "";
+    if(tag === "INPUT" || tag === "TEXTAREA") return;
+    if(e.key === "ArrowRight"){ e.preventDefault(); show(idx + 1, true); }
+    else if(e.key === "ArrowLeft"){ e.preventDefault(); show(idx - 1, true); }
+    else if(e.key === " "){ e.preventDefault(); readWord(); }
+  });
+
+  window.addEventListener("pagehide", function(){ cancelSpeech(); });
+  window.addEventListener("blur", function(){ /* keep reading; browsers handle it */ });
+})();
+</script>

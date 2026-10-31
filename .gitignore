@@ -1,0 +1,9 @@
+# Local machine file
+desktop.ini
+
+# Local Claude settings
+.claude/settings.local.json
+
+# Scratch screenshots and test pages
+/_*.html
+/_*.png

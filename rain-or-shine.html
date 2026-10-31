@@ -1,0 +1,695 @@
+<title>Rain or Shine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;900&display=swap">
+<style>
+/* ── Design plan ────────────────────────────────────────────────
+   Subject: 17 words that are one story — a rainy morning turns into
+            a sunny afternoon. The stage emoji is the weather itself
+            or the thing the weather lets you do; the light is
+            re-tinted per stop, rain blue → storm violet → curtain
+            amber → sun gold → picnic pink, so the rail reads as a
+            day clearing up
+   Color  : warm paper ground + ink that stays brown-biased;
+            the accent is re-tinted per stop
+   Type   : Baloo 2 (rounded display: word, title)
+            Nunito (UI, labels, Chinese gloss)
+   Layout : one centered column — word rail, reading stage, controls
+   ─────────────────────────────────────────────────────────────── */
+:root{
+  --bg:#FFF6EA;
+  --bg-glow:#FFE7CC;
+  --surface:#FFFDFA;
+  --surface-2:#FFF4E6;
+  --ink:#2C2119;
+  --ink-soft:#8A7563;
+  --line:#EEDCC6;
+  --accent:#4FA8D8;
+  --accent-ink:#256E9C;
+  --accent-soft:rgba(79,168,216,.16);
+  --shadow:0 20px 44px -22px rgba(122,80,40,.5), 0 2px 6px rgba(122,80,40,.07);
+  --r-card:26px;
+  --r-ctl:16px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16120F;
+    --bg-glow:#241A12;
+    --surface:#221B15;
+    --surface-2:#2A211A;
+    --ink:#F8EFE5;
+    --ink-soft:#B09C89;
+    --line:#3B2F25;
+    --accent-ink:var(--accent);
+    --accent-soft:rgba(79,168,216,.22);
+    --shadow:0 20px 44px -22px rgba(0,0,0,.8), 0 2px 6px rgba(0,0,0,.45);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16120F;
+  --bg-glow:#241A12;
+  --surface:#221B15;
+  --surface-2:#2A211A;
+  --ink:#F8EFE5;
+  --ink-soft:#B09C89;
+  --line:#3B2F25;
+  --accent-ink:var(--accent);
+  --accent-soft:rgba(79,168,216,.22);
+  --shadow:0 20px 44px -22px rgba(0,0,0,.8), 0 2px 6px rgba(0,0,0,.45);
+  color-scheme: dark;
+}
+
+html{height:100%}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding-block:18px;
+  padding-inline:16px;
+  font-family:'Nunito',system-ui,-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  font-size:15px;
+  color:var(--ink);
+  background:
+    radial-gradient(900px 420px at 50% -8%, var(--bg-glow), transparent 72%),
+    var(--bg);
+  background-attachment:fixed;
+  min-height:100%;
+  display:flex;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.app{width:100%;max-width:720px;margin-block:auto;display:flex;flex-direction:column;gap:14px}
+
+/* ── Header ─────────────────────────────────────────── */
+.head{display:flex;align-items:flex-end;justify-content:flex-end;gap:12px;padding-inline:4px}
+.prog{
+  font-weight:900;
+  font-size:13px;
+  letter-spacing:1px;
+  color:var(--ink-soft);
+  font-variant-numeric:tabular-nums;
+  padding-bottom:4px;
+  white-space:nowrap;
+}
+
+/* ── Word rail ──────────────────────────────────────── */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  font:inherit;
+  font-weight:900;
+  font-size:14px;
+  line-height:1;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:9px 13px;
+  min-height:40px;
+  border:1.5px solid var(--line);
+  border-radius:999px;
+  background:var(--surface);
+  color:var(--ink-soft);
+  cursor:pointer;
+  touch-action:manipulation;
+  transition:transform .16s ease, color .16s ease, background .16s ease, border-color .16s ease;
+}
+.chip:hover{border-color:var(--chip-c,var(--accent));color:var(--ink);transform:translateY(-2px)}
+.chip.on{
+  background:var(--chip-c,var(--accent));
+  border-color:var(--chip-c,var(--accent));
+  color:#fff;
+  box-shadow:0 10px 20px -12px var(--chip-c,var(--accent));
+}
+.chip .em{font-size:15px;line-height:1}
+
+/* ── Stage card ─────────────────────────────────────── */
+.card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  padding:16px 16px 22px;
+  border:1.5px solid var(--line);
+  border-radius:var(--r-card);
+  background:
+    radial-gradient(460px 190px at 50% -40px, var(--accent-soft), transparent 72%),
+    var(--surface);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.card.enter{animation:cardIn .42s cubic-bezier(.22,1.2,.42,1) both}
+@keyframes cardIn{from{opacity:.35;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+
+/* weather / action */
+.art-wrap{
+  position:relative;
+  display:grid;
+  place-items:center;
+  height:clamp(132px,24vh,190px);
+}
+.glow{
+  position:absolute;
+  width:180px;height:180px;
+  border-radius:50%;
+  background:var(--accent);
+  opacity:.18;
+  filter:blur(40px);
+  transition:background .3s ease;
+}
+.art{
+  position:relative;
+  font-size:calc(clamp(74px,19vw,118px) * var(--art-scale,1));
+  line-height:1;
+  cursor:pointer;
+  user-select:none;
+  touch-action:manipulation;
+  filter:drop-shadow(0 16px 20px rgba(60,30,10,.22));
+  transform-origin:50% 62%;
+  transition:filter .2s ease;
+}
+.art:hover{filter:drop-shadow(0 18px 24px rgba(60,30,10,.3))}
+.art-sm{
+  position:absolute;
+  right:12%;
+  bottom:10%;
+  font-size:40px;
+  line-height:1;
+  transform-origin:50% 60%;
+  filter:drop-shadow(0 8px 10px rgba(60,30,10,.2));
+}
+.art-sm::after{
+  content:attr(data-label);
+  position:absolute;
+  left:50%;top:100%;
+  transform:translateX(-50%);
+  font-family:'Nunito',sans-serif;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.art-sm[hidden]{display:none}
+
+/* one motion per stop: falling rain, a storm shake, a curtain opening,
+   the wind pushing through, then the outdoor verbs */
+.art.anim-drop{animation:dropIn 1s cubic-bezier(.3,1.25,.5,1) both}
+@keyframes dropIn{0%{transform:translateY(-46px) scale(.7);opacity:0}60%{transform:translateY(5px) scale(1);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
+.art.anim-drizzle{animation:drizzle 2.2s ease-in-out 2}
+@keyframes drizzle{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(9px) scale(1.03,.97)}}
+.art.anim-shake{animation:thunderShake 1.1s cubic-bezier(.36,.07,.19,.97) 2}
+@keyframes thunderShake{
+  0%,100%{transform:translate(0,0) rotate(0)}
+  10%{transform:translate(-7px,2px) rotate(-5deg)}
+  22%{transform:translate(8px,-2px) rotate(6deg)}
+  34%{transform:translate(-6px,1px) rotate(-4deg)}
+  46%{transform:translate(5px,2px) rotate(3deg)}
+  58%{transform:translate(-3px,-1px) rotate(-2deg)}
+  70%{transform:translate(2px,0) rotate(1deg)}
+}
+.art.anim-open{transform-origin:10% 50%;animation:openIn 1.3s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes openIn{
+  0%{transform:perspective(600px) rotateY(82deg);opacity:0}
+  55%{opacity:1}
+  76%{transform:perspective(600px) rotateY(-9deg)}
+  100%{transform:perspective(600px) rotateY(0)}
+}
+.art.anim-peek{animation:peekIn 1.4s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes peekIn{
+  0%{transform:translateX(76px) rotate(9deg);opacity:0}
+  55%{transform:translateX(-11px) rotate(-3deg);opacity:1}
+  100%{transform:translateX(0) rotate(0)}
+}
+.art.anim-sway{animation:sway 2.4s ease-in-out 2}
+@keyframes sway{0%,100%{transform:rotate(-6deg) translateX(-7px)}50%{transform:rotate(6deg) translateX(7px)}}
+.art.anim-gust{animation:gust 1.8s ease-in-out 2}
+@keyframes gust{
+  0%,100%{transform:translateX(0) rotate(0)}
+  22%{transform:translateX(-24px) rotate(-8deg)}
+  50%{transform:translateX(22px) rotate(7deg)}
+  78%{transform:translateX(-9px) rotate(-2deg)}
+}
+.art.anim-shine{animation:shine 2s ease-in-out 2}
+@keyframes shine{
+  0%,100%{transform:scale(1) rotate(0);filter:drop-shadow(0 16px 20px rgba(60,30,10,.22))}
+  50%{transform:scale(1.13) rotate(10deg);filter:drop-shadow(0 0 26px rgba(245,179,1,.85))}
+}
+.art.anim-bounce{animation:bounce 1.6s cubic-bezier(.3,1.1,.45,1) 2}
+@keyframes bounce{
+  0%,100%{transform:translateY(0) scale(1,1)}
+  12%{transform:translateY(0) scale(1.09,.88)}
+  45%{transform:translateY(-54px) scale(.95,1.06)}
+  72%{transform:translateY(0) scale(1.17,.83)}
+  86%{transform:translateY(-10px) scale(1,1)}
+}
+.art.anim-pop{animation:popIn .9s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes popIn{0%{transform:scale(.3);opacity:0}55%{transform:scale(1.22);opacity:1}75%{transform:scale(.95)}100%{transform:scale(1)}}
+.art.anim-squirt{animation:squirt 1.15s cubic-bezier(.3,1.1,.4,1) 2}
+@keyframes squirt{
+  0%,100%{transform:rotate(0) translateX(0)}
+  18%{transform:rotate(-17deg) translateX(-6px)}
+  36%{transform:rotate(7deg) translateX(1px)}
+  54%{transform:rotate(-4deg)}
+  72%{transform:rotate(2deg)}
+}
+.art.anim-float{animation:bubbleFloat 2.4s ease-in-out 2}
+@keyframes bubbleFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  35%{transform:translate(-8px,-26px) scale(1.05)}
+  70%{transform:translate(8px,-8px) scale(.98)}
+}
+.art.anim-swim{animation:swim 2s ease-in-out 2}
+@keyframes swim{
+  0%,100%{transform:translateX(0) rotate(0)}
+  25%{transform:translateX(18px) rotate(10deg)}
+  50%{transform:translateX(0) rotate(0)}
+  75%{transform:translateX(-18px) rotate(-10deg)}
+}
+.art.anim-breathe{animation:breathe 3.2s ease-in-out 2}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.art.anim-waddle{transform-origin:50% 86%;animation:waddleWalk 2.1s ease-in-out 2}
+@keyframes waddleWalk{
+  0%,50%,100%{transform:rotate(0) translate(0,0)}
+  12%,62%{transform:rotate(-13deg) translate(-15px,-4px)}
+  37%,87%{transform:rotate(13deg) translate(15px,-4px)}
+}
+
+/* particles */
+.fx{position:absolute;inset:0;pointer-events:none}
+.fx i{
+  position:absolute;
+  left:50%;top:52%;
+  font-style:normal;
+  font-size:24px;
+  opacity:0;
+  animation:fxUp .95s cubic-bezier(.2,.8,.3,1) forwards;
+}
+@keyframes fxUp{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(0)}
+  22%{opacity:1}
+  100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.15) rotate(var(--rot))}
+}
+
+/* ── Word meta ──────────────────────────────────────── */
+.meta{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:9px;
+  padding:6px 4px 10px;
+  text-align:center;
+  font-weight:700;
+  color:var(--ink-soft);
+}
+.meta .w{
+  font-family:'Baloo 2','Nunito',system-ui,sans-serif;
+  font-weight:800;
+  font-size:clamp(26px,6vw,38px);
+  line-height:1.2;
+  color:var(--accent-ink);
+}
+.meta .ipa{font-size:14px;letter-spacing:.4px}
+.meta .cn{
+  font-size:14px;
+  font-weight:900;
+  padding:4px 11px;
+  border-radius:999px;
+  background:var(--accent-soft);
+  color:var(--accent-ink);
+}
+
+/* ── Controls ───────────────────────────────────────── */
+.ctrls{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.btn{
+  font:inherit;
+  font-weight:900;
+  font-size:15px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:48px;
+  padding:0 18px;
+  border:1.5px solid var(--line);
+  border-radius:var(--r-ctl);
+  background:var(--surface);
+  color:var(--ink);
+  cursor:pointer;
+  touch-action:manipulation;
+  transition:transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+}
+.btn:hover{transform:translateY(-2px);border-color:var(--accent)}
+.btn:active{transform:translateY(0) scale(.975)}
+.btn.primary{
+  background:var(--accent-ink);
+  border-color:var(--accent-ink);
+  color:#fff;
+  box-shadow:0 12px 24px -14px var(--accent-ink);
+}
+.btn.primary:hover{border-color:var(--accent-ink)}
+.btn.icon{padding:0 15px;font-size:19px}
+.btn[aria-pressed="true"]{
+  background:var(--accent-soft);
+  border-color:var(--accent);
+  color:var(--accent-ink);
+}
+.btn:focus-visible,.chip:focus-visible,.art:focus-visible{
+  outline:3px solid var(--accent);
+  outline-offset:2px;
+}
+
+/* ── Coach mark ─────────────────────────────────────── */
+.coach{
+  position:absolute;
+  left:50%;bottom:-4px;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 14px;
+  border-radius:999px;
+  background:var(--accent-ink);
+  color:#fff;
+  font-size:13.5px;
+  font-weight:900;
+  white-space:nowrap;
+  box-shadow:0 14px 26px -14px rgba(0,0,0,.6);
+  animation:coachIn .5s .35s both;
+  z-index:5;
+}
+.coach .hand{display:inline-block;font-size:17px;animation:tap 1.1s ease-in-out infinite}
+@keyframes tap{0%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+@keyframes coachIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+.coach.gone{display:none}
+
+@media (max-width:420px){
+  :root{--r-card:22px}
+  .chip{font-size:13px;padding:8px 11px}
+  .meta .w{font-size:clamp(24px,7vw,30px)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.06s !important}
+  .fx{display:none}
+}
+</style>
+
+<div class="app">
+  <div class="head">
+    <div class="prog" id="prog">1 / 17</div>
+  </div>
+
+  <nav class="chips" id="chips" aria-label="选择单词"></nav>
+
+  <main class="card" id="card">
+    <div class="art-wrap">
+      <div class="glow"></div>
+      <div class="art" id="art" role="button" tabindex="0" aria-label="点击朗读单词">☔</div>
+      <div class="art-sm" id="artSm" data-label="rain" hidden>🌧️</div>
+      <div class="fx" id="fx"></div>
+    </div>
+
+    <div class="meta">
+      <span class="w" id="mWord">rain</span>
+      <span class="ipa" id="mIpa">/reɪn/</span>
+      <span class="cn" id="mCn">雨</span>
+    </div>
+
+    <div class="coach" id="coach"><span class="hand">👆</span>点图片或 ▶ 听单词发音</div>
+  </main>
+
+  <div class="ctrls">
+    <button class="btn primary" id="play"><span>▶</span>读单词</button>
+    <button class="btn icon" id="prev" aria-label="上一个">←</button>
+    <button class="btn icon" id="next" aria-label="下一个">→</button>
+    <button class="btn" id="slow" aria-pressed="false">🐢 慢速</button>
+    <button class="btn" id="all" aria-pressed="false">🔁 全部连读</button>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var LESSONS = [
+    { word:"rain",                ipa:"/reɪn/",                    cn:"雨",           art:"☔",  scale:.95, color:"#4FA8D8", ink:"#256E9C", anim:"drop",    fx:["💧","🌧️","✨"] },
+    { word:"rainy",               ipa:"/ˈreɪni/",                  cn:"下雨的",       art:"🌧️", scale:1,   color:"#3B82C4", ink:"#1D5A8F", anim:"drizzle", fx:["💧","☔","✨"] },
+    { word:"thunder",             ipa:"/ˈθʌndər/",                 cn:"雷；打雷",     art:"🌩️", scale:1,   color:"#7C6BD6", ink:"#5445A8", anim:"shake",   fx:["⚡","💥","✨"] },
+    { word:"open the curtain",    ipa:"/ˈoʊpən ðə ˈkɜːrtn/",       cn:"拉开窗帘",     art:"🪟",  scale:.95, color:"#C98A3E", ink:"#8E5A1A", anim:"open",    fx:["✨","🪟","🌤️"] },
+    { word:"look outside",        ipa:"/lʊk ˌaʊtˈsaɪd/",           cn:"向外看",       art:"👀",  scale:.95, color:"#2F9FB8", ink:"#16738A", anim:"peek",    fx:["🔍","✨","👀"] },
+    { word:"come again another day", ipa:"/kʌm əˈɡen əˈnʌðər deɪ/", cn:"改天再来吧",   art:"🎶",  chip:"🌧️", scale:.95, color:"#6A8FD8", ink:"#4463A8", anim:"sway",    fx:["🎵","💧","✨"], small:"🌧️", smallLabel:"rain" },
+    { word:"windy",               ipa:"/ˈwɪndi/",                  cn:"有风的",       art:"🌬️", scale:1,   color:"#5BAE9E", ink:"#2F7D6E", anim:"gust",    fx:["🍃","💨","✨"] },
+    { word:"sunny",               ipa:"/ˈsʌni/",                   cn:"晴朗的",       art:"☀️",  scale:1,   color:"#F5B301", ink:"#9A6B00", anim:"shine",   fx:["☀️","✨","🌟"] },
+    { word:"play basketball",     ipa:"/pleɪ ˈbæskɪtbɔːl/",        cn:"打篮球",       art:"🏀",  scale:.95, color:"#F2764B", ink:"#B4421C", anim:"bounce",  fx:["🏀","💨","✨"] },
+    { word:"have a picnic",       ipa:"/hæv ə ˈpɪknɪk/",           cn:"去野餐",       art:"🧺",  scale:1,   color:"#E2568C", ink:"#B32862", anim:"pop",     fx:["🧺","🥪","✨"] },
+    { word:"play with a water gun", ipa:"/pleɪ wɪð ə ˈwɔːtər ɡʌn/", cn:"玩水枪",      art:"🔫",  scale:.9,  color:"#2FA8E0", ink:"#16719E", anim:"squirt",  fx:["💦","💧","✨"] },
+    { word:"blow bubbles",        ipa:"/bloʊ ˈbʌblz/",             cn:"吹泡泡",       art:"🫧",  scale:.95, color:"#8E7BD8", ink:"#5F4CA8", anim:"float",   fx:["🫧","✨","💫"] },
+    { word:"play with sand",      ipa:"/pleɪ wɪð sænd/",           cn:"玩沙子",       art:"🏖️", scale:.95, color:"#D9A227", ink:"#8F6600", anim:"sway",    fx:["🏖️","🐚","✨"] },
+    { word:"go fishing",          ipa:"/ɡoʊ ˈfɪʃɪŋ/",              cn:"去钓鱼",       art:"🎣",  scale:.95, color:"#2F6FB0", ink:"#1C4C82", anim:"sway",    fx:["🐟","💧","✨"] },
+    { word:"go swimming",         ipa:"/ɡoʊ ˈswɪmɪŋ/",             cn:"去游泳",       art:"🏊",  scale:.95, color:"#18A0A8", ink:"#0C6E74", anim:"swim",    fx:["💦","🌊","✨"] },
+    { word:"go sunbathing",       ipa:"/ɡoʊ ˈsʌnbeɪðɪŋ/",          cn:"去晒太阳",     art:"⛱️", scale:.95, color:"#F0862B", ink:"#B85408", anim:"breathe", fx:["☀️","🕶️","✨"] },
+    { word:"go square dancing",   ipa:"/ɡoʊ skwer ˈdænsɪŋ/",       cn:"去跳广场舞",   art:"💃",  scale:.95, color:"#E5484D", ink:"#C0272D", anim:"waddle",  fx:["🎵","💃","✨"] }
+  ];
+
+  var root = document.documentElement;
+  var $ = function(id){ return document.getElementById(id); };
+  var elChips = $("chips"), elCard = $("card"), elArt = $("art"), elArtSm = $("artSm"),
+      elFx = $("fx"),
+      elWord = $("mWord"), elIpa = $("mIpa"), elCn = $("mCn"), elProg = $("prog"),
+      elPlay = $("play"), elCoach = $("coach");
+
+  var idx = 0, slow = false, autoAll = false;
+  var curUtt = null, coached = false, started = false;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ── speech ─────────────────────────────────────── */
+  var hasSpeech = ("speechSynthesis" in window) && ("SpeechSynthesisUtterance" in window);
+  var voices = [];
+
+  function loadVoices(){
+    if(!hasSpeech) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if(hasSpeech && window.speechSynthesis.onvoiceschanged !== undefined){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }
+
+  var PREFERRED = ["Google US English","Samantha","Karen","Microsoft Aria Online (Natural) - English (United States)",
+                   "Microsoft Aria","Microsoft Jenny","Microsoft Zira","Microsoft Michelle","Daniel","Alex"];
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    if(!voices.length) return null;
+    var en = voices.filter(function(v){ return /^en(-|_|$)/i.test(v.lang || ""); });
+    if(!en.length) en = voices;
+    for(var i=0;i<PREFERRED.length;i++){
+      for(var j=0;j<en.length;j++){
+        if((en[j].name || "").indexOf(PREFERRED[i]) === 0) return en[j];
+      }
+    }
+    for(var k=0;k<en.length;k++){ if(/^en[-_]US/i.test(en[k].lang || "")) return en[k]; }
+    return en[0];
+  }
+
+  function rate(){ return slow ? 0.62 : 0.86; }
+
+  function utter(text, r){
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US";
+    u.rate = r;
+    u.pitch = 1.05;
+    u.volume = 1;
+    var v = pickVoice();
+    if(v) u.voice = v;
+    return u;
+  }
+
+  function cancelSpeech(){
+    if(!hasSpeech) return;
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+    curUtt = null;
+  }
+
+  /* ── reading ────────────────────────────────────── */
+  var wordActive = false;
+
+  function stopAll(){
+    wordActive = false;
+    cancelSpeech();
+  }
+
+  function finishWord(){
+    wordActive = false;
+    cancelSpeech();
+    if(autoAll){
+      setTimeout(function(){
+        if(!autoAll || wordActive) return;
+        var n = (idx + 1) % LESSONS.length;
+        if(n === 0){ setAuto(false); }
+        show(n, true);
+      }, 700);
+    }
+  }
+
+  function readWord(){
+    stopAll();
+    var L = LESSONS[idx];
+    wordActive = true;
+
+    playAnim(L);
+
+    if(!hasSpeech){ finishWord(); return; }
+
+    var u = utter(L.word, rate());
+    var gotStart = false;
+    u.onstart = function(){ gotStart = true; };
+    u.onend = function(){ if(wordActive) finishWord(); };
+    u.onerror = function(){ if(wordActive) finishWord(); };
+    curUtt = u;
+
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+    window.speechSynthesis.speak(u);
+
+    /* 合成器不发声时（无可用语音）也继续往下走 */
+    setTimeout(function(){
+      if(wordActive && !gotStart){ cancelSpeech(); finishWord(); }
+    }, 1600);
+  }
+
+  /* ── animation ──────────────────────────────────── */
+  function playAnim(L){
+    elArt.className = "art";
+    void elArt.offsetWidth;
+    elArt.classList.add("anim-" + L.anim);
+    spawnFx(L.fx);
+  }
+
+  function spawnFx(list){
+    if(reduced || !list || !list.length) return;
+    for(var i=0;i<7;i++){
+      (function(i){
+        setTimeout(function(){
+          var s = document.createElement("i");
+          s.textContent = list[i % list.length];
+          s.style.setProperty("--dx", (Math.random()*220 - 110).toFixed(0) + "px");
+          s.style.setProperty("--dy", (-60 - Math.random()*110).toFixed(0) + "px");
+          s.style.setProperty("--rot", (Math.random()*80 - 40).toFixed(0) + "deg");
+          s.style.setProperty("font-size", (17 + Math.random()*13).toFixed(0) + "px");
+          elFx.appendChild(s);
+          setTimeout(function(){ if(s.parentNode) s.parentNode.removeChild(s); }, 1100);
+        }, i * 85);
+      })(i);
+    }
+  }
+
+  /* ── render a lesson ────────────────────────────── */
+  function show(i, autoplay){
+    stopAll();
+    if(started) dismissCoach();   /* 一换词就收起提示，长短语才不会压住中文 */
+    started = true;
+    idx = (i + LESSONS.length) % LESSONS.length;
+    var L = LESSONS[idx];
+
+    root.style.setProperty("--accent", L.color);
+    root.style.setProperty("--accent-ink", L.ink);
+    root.style.setProperty("--accent-soft", hexA(L.color, .16));
+    root.style.setProperty("--art-scale", L.scale || 1);   /* 天气与活动的体量 */
+
+    for(var c=0;c<elChips.children.length;c++){
+      elChips.children[c].classList.toggle("on", c === idx);
+      elChips.children[c].setAttribute("aria-current", c === idx ? "true" : "false");
+    }
+
+    elArt.className = "art";
+    elArt.textContent = L.art;
+    if(L.small){
+      elArtSm.textContent = L.small;
+      elArtSm.setAttribute("data-label", L.smallLabel || "");
+      elArtSm.hidden = false;
+    }
+    else { elArtSm.hidden = true; }
+
+    elWord.textContent = L.word;
+    elIpa.textContent = L.ipa;
+    elCn.textContent = L.cn;
+    elProg.textContent = (idx + 1) + " / " + LESSONS.length;
+
+    elCard.classList.remove("enter");
+    void elCard.offsetWidth;
+    elCard.classList.add("enter");
+
+    playAnim(L);
+
+    if(autoplay) setTimeout(function(){ if(!wordActive) readWord(); }, 380);
+  }
+
+  function hexA(hex, a){
+    var h = hex.replace("#", "");
+    if(h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    var n = parseInt(h, 16);
+    return "rgba(" + ((n>>16)&255) + "," + ((n>>8)&255) + "," + (n&255) + "," + a + ")";
+  }
+
+  /* ── controls ───────────────────────────────────── */
+  function buildChips(){
+    LESSONS.forEach(function(L, i){
+      var b = document.createElement("button");
+      b.className = "chip";
+      b.type = "button";
+      b.style.setProperty("--chip-c", L.ink);
+      b.innerHTML = '<span class="em">' + (L.chip || L.art) + "</span>" + L.word;
+      b.addEventListener("click", function(){ dismissCoach(); show(i, true); });
+      elChips.appendChild(b);
+    });
+  }
+
+  function dismissCoach(){
+    if(coached) return;
+    coached = true;
+    elCoach.classList.add("gone");
+  }
+
+  function setSlow(v){
+    slow = v;
+    $("slow").setAttribute("aria-pressed", v ? "true" : "false");
+  }
+  function setAuto(v){
+    autoAll = v;
+    $("all").setAttribute("aria-pressed", v ? "true" : "false");
+  }
+
+  buildChips();
+  show(0, false);
+
+  elPlay.addEventListener("click", function(){ dismissCoach(); readWord(); });
+  elArt.addEventListener("click", function(){ dismissCoach(); readWord(); });
+  elArt.addEventListener("keydown", function(e){
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); dismissCoach(); readWord(); }
+  });
+  $("prev").addEventListener("click", function(){ dismissCoach(); show(idx - 1, true); });
+  $("next").addEventListener("click", function(){ dismissCoach(); show(idx + 1, true); });
+  $("slow").addEventListener("click", function(){ dismissCoach(); setSlow(!slow); });
+  $("all").addEventListener("click", function(){
+    dismissCoach();
+    var v = !autoAll;
+    setAuto(v);
+    if(v) readWord(); else stopAll();
+  });
+
+  document.addEventListener("click", dismissCoach, { once:true });
+
+  document.addEventListener("keydown", function(e){
+    var tag = (e.target && e.target.tagName) || "";
+    if(tag === "INPUT" || tag === "TEXTAREA") return;
+    if(e.key === "ArrowRight"){ e.preventDefault(); show(idx + 1, true); }
+    else if(e.key === "ArrowLeft"){ e.preventDefault(); show(idx - 1, true); }
+    else if(e.key === " "){ e.preventDefault(); readWord(); }
+  });
+
+  window.addEventListener("pagehide", function(){ cancelSpeech(); });
+})();
+</script>
