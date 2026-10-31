@@ -1,83 +1,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mosquito Bite</title>
+<title>L2 I have a pet cat</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;900&display=swap">
 <style>
 /* ── Design plan ────────────────────────────────────────────────
-   Subject: 16 words that walk a child through the body — a mosquito
-            bite, then head to toe, then the private places that are
-            only for you, and the trusted adult you can tell.
-            Body words share one friendly figure; the part being
-            named gets a soft pulsing ring, so the stage reads as a
-            body map rather than a row of unrelated pictures.
-   Color  : fresh mint-paper ground + ink that stays forest-biased;
-            the accent is re-tinted per stop, from olive (mosquito)
-            to red (blood) to warm green (trusted adult)
+   Subject: 13 words for one small kitten's day — a pet, a ball of
+            yarn, a dash, then every mood the Soft Kitty song names.
+            The stage emoji is the thing the word is about; the small
+            corner emoji keeps the kitten present when the stage is a
+            cloud, a bowl or a sunbeam
+   Color  : blush-paper ground + ink that stays plum-biased; the
+            accent is re-tinted per stop — rose, coral, amber, sky,
+            caramel, orange, violet, pink, teal, red, periwinkle,
+            blue, mint — so the rail reads as a mood changing
    Type   : Baloo 2 (rounded display: word, title)
             Nunito (UI, labels, Chinese gloss)
    Layout : one centered column — word rail, reading stage, controls
    ─────────────────────────────────────────────────────────────── */
 :root{
-  --bg:#F5FBF7;
-  --bg-glow:#DCEFE2;
-  --surface:#FFFFFF;
-  --surface-2:#EDF8F1;
-  --ink:#1E2A23;
-  --ink-soft:#6C8175;
-  --line:#D6E8DD;
-  --accent:#4C9A7A;
-  --accent-ink:#2E7458;
-  --accent-soft:rgba(76,154,122,.16);
-  --shadow:0 20px 44px -22px rgba(34,84,58,.38), 0 2px 6px rgba(34,84,58,.06);
+  --bg:#FFF7F2;
+  --bg-glow:#FFE1D6;
+  --surface:#FFFDFC;
+  --surface-2:#FFF0E9;
+  --ink:#32232A;
+  --ink-soft:#8F7A80;
+  --line:#F1DEDB;
+  --accent:#E86A8A;
+  --accent-ink:#B32862;
+  --accent-soft:rgba(232,106,138,.16);
+  --shadow:0 20px 44px -22px rgba(122,60,80,.45), 0 2px 6px rgba(122,60,80,.07);
   --r-card:26px;
   --r-ctl:16px;
-  --skin:#F2C9A6;
-  --skin-line:#D3A27B;
-  --hair:#3A2A26;
-  --shirt:#8FCBB7;
-  --shorts:#5FA48D;
-  --shoe:#E86A5A;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#101613;
-    --bg-glow:#18251E;
-    --surface:#18211C;
-    --surface-2:#202B25;
-    --ink:#EFF8F1;
-    --ink-soft:#9BB2A5;
-    --line:#2D3D34;
+    --bg:#161113;
+    --bg-glow:#241419;
+    --surface:#221A1D;
+    --surface-2:#2A2024;
+    --ink:#FAEFF2;
+    --ink-soft:#B29CA3;
+    --line:#3C2C31;
     --accent-ink:var(--accent);
-    --accent-soft:rgba(76,154,122,.22);
+    --accent-soft:rgba(232,106,138,.22);
     --shadow:0 20px 44px -22px rgba(0,0,0,.8), 0 2px 6px rgba(0,0,0,.45);
-    --skin:#E0B18C;
-    --skin-line:#BD8B68;
-    --hair:#2A1E1B;
-    --shirt:#6FAF9A;
-    --shorts:#4C8E77;
-    --shoe:#D95D4E;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#101613;
-  --bg-glow:#18251E;
-  --surface:#18211C;
-  --surface-2:#202B25;
-  --ink:#EFF8F1;
-  --ink-soft:#9BB2A5;
-  --line:#2D3D34;
+  --bg:#161113;
+  --bg-glow:#241419;
+  --surface:#221A1D;
+  --surface-2:#2A2024;
+  --ink:#FAEFF2;
+  --ink-soft:#B29CA3;
+  --line:#3C2C31;
   --accent-ink:var(--accent);
-  --accent-soft:rgba(76,154,122,.22);
+  --accent-soft:rgba(232,106,138,.22);
   --shadow:0 20px 44px -22px rgba(0,0,0,.8), 0 2px 6px rgba(0,0,0,.45);
-  --skin:#E0B18C;
-  --skin-line:#BD8B68;
-  --hair:#2A1E1B;
-  --shirt:#6FAF9A;
-  --shorts:#4C8E77;
-  --shoe:#D95D4E;
   color-scheme: dark;
 }
 
@@ -161,12 +143,12 @@ body{
 .card.enter{animation:cardIn .42s cubic-bezier(.22,1.2,.42,1) both}
 @keyframes cardIn{from{opacity:.35;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
 
-/* body-map stage */
+/* kitten stage */
 .art-wrap{
   position:relative;
   display:grid;
   place-items:center;
-  height:clamp(156px,28vh,236px);
+  height:clamp(132px,24vh,190px);
 }
 .glow{
   position:absolute;
@@ -184,196 +166,19 @@ body{
   cursor:pointer;
   user-select:none;
   touch-action:manipulation;
-  filter:drop-shadow(0 16px 20px rgba(40,80,58,.18));
+  filter:drop-shadow(0 16px 20px rgba(90,40,60,.2));
   transform-origin:50% 62%;
   transition:filter .2s ease;
 }
-.art:hover{filter:drop-shadow(0 18px 24px rgba(40,80,58,.26))}
-
-/* the shared body figure */
-.figure{
-  height:clamp(148px,26vh,218px);
-  width:auto;
-  display:block;
-  overflow:visible;
-}
-.face-figure{height:clamp(150px,25vh,202px)}
-.figure .skin{fill:var(--skin)}
-.figure .hair{fill:var(--hair)}
-.figure .shirt{fill:var(--shirt)}
-.figure .shorts{fill:var(--shorts)}
-.figure .shoe{fill:var(--shoe)}
-.figure .arm{fill:none;stroke:var(--skin);stroke-width:10;stroke-linecap:round}
-.figure .leg{fill:none;stroke:var(--skin);stroke-width:12;stroke-linecap:round}
-.figure .eye{fill:#2E2320}
-.figure .line{fill:none;stroke:var(--skin-line);stroke-width:2;stroke-linecap:round}
-.figure .smile{fill:none;stroke:#B26B58;stroke-width:2;stroke-linecap:round}
-.figure .heart{fill:rgba(255,255,255,.55)}
-.figure .blush{fill:#F09A93;opacity:.28}
-.figure g{transform-box:fill-box;transform-origin:center}
-.figure .ring{
-  fill:none;
-  stroke:var(--accent-ink);
-  stroke-width:3.5;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  transform-box:fill-box;
-  transform-origin:center;
-  filter:drop-shadow(0 0 7px var(--accent-soft));
-  animation:ringPulse 1.7s ease-in-out infinite;
-}
-.figure .shield{
-  fill:var(--accent-soft);
-  stroke:var(--accent-ink);
-  stroke-width:2.5;
-  stroke-linejoin:round;
-  transform-box:fill-box;
-  transform-origin:center;
-  animation:shieldPulse 1.7s ease-in-out infinite;
-}
-.figure .dot{
-  fill:var(--accent-ink);
-  transform-box:fill-box;
-  transform-origin:center;
-  animation:dotPulse 1.5s ease-in-out infinite;
-}
-.figure .pointer{
-  fill:none;
-  stroke:var(--accent-ink);
-  stroke-width:2.5;
-  stroke-linecap:round;
-  stroke-dasharray:2 5;
-  opacity:.85;
-}
-@keyframes ringPulse{
-  0%,100%{opacity:.7;transform:scale(1)}
-  50%{opacity:1;transform:scale(1.06)}
-}
-@keyframes dotPulse{
-  0%,100%{transform:scale(.8);opacity:.6}
-  50%{transform:scale(1.2);opacity:1}
-}
-@keyframes shieldPulse{
-  0%,100%{opacity:.55;transform:scale(1)}
-  50%{opacity:1;transform:scale(1.06)}
-}
-
-/* one motion per stop */
-.art.anim-buzz{animation:buzz 1.8s ease-in-out 2}
-@keyframes buzz{
-  0%,100%{transform:translate(0,0) rotate(0)}
-  20%{transform:translate(-22px,-14px) rotate(-8deg)}
-  40%{transform:translate(18px,-24px) rotate(6deg)}
-  60%{transform:translate(-12px,-6px) rotate(-4deg)}
-  80%{transform:translate(10px,-18px) rotate(3deg)}
-}
-.art.anim-bite{transform-origin:50% 70%;animation:bite 1s ease-in-out 2}
-@keyframes bite{
-  0%,100%{transform:scale(1) rotate(0)}
-  16%{transform:scale(1.08,.94) rotate(-2deg)}
-  32%{transform:scale(.95,1.05) rotate(2deg)}
-  52%{transform:scale(1.03,.98) rotate(-1deg)}
-}
-.art.anim-drip{animation:drip 1.6s ease-in-out 2}
-@keyframes drip{
-  0%,100%{transform:translateY(0) scale(1)}
-  45%{transform:translateY(10px) scale(1.08,.94)}
-  70%{transform:translateY(3px) scale(.98,1.02)}
-}
-.art.anim-trust{animation:trust 2s ease-in-out 2}
-@keyframes trust{
-  0%,100%{transform:scale(1);filter:drop-shadow(0 16px 20px rgba(40,80,58,.18))}
-  50%{transform:scale(1.08);filter:drop-shadow(0 0 26px rgba(76,154,122,.8))}
-}
-
-/* body-map part motions */
-.art.anim-body #figure{animation:bodySway 1.8s ease-in-out 2}
-@keyframes bodySway{
-  0%,100%{transform:rotate(0)}
-  30%{transform:rotate(-1.5deg)}
-  60%{transform:rotate(1.5deg)}
-}
-.art.anim-head #headG{animation:headBob 1.2s ease-in-out 2}
-@keyframes headBob{
-  0%,100%{transform:translateY(0) rotate(0)}
-  30%{transform:translateY(-4px) rotate(-5deg)}
-  65%{transform:translateY(1px) rotate(4deg)}
-}
-.art.anim-nose #headG{animation:noseWiggle 1.2s ease-in-out 2}
-@keyframes noseWiggle{
-  0%,100%{transform:rotate(0)}
-  25%{transform:rotate(-3deg)}
-  50%{transform:rotate(3deg)}
-  75%{transform:rotate(-1deg)}
-}
-.art.anim-chin #headG{transform-origin:50% 80%;animation:chinNod 1.3s ease-in-out 2}
-@keyframes chinNod{
-  0%,100%{transform:rotate(0)}
-  30%{transform:rotate(6deg)}
-  60%{transform:rotate(-2deg)}
-}
-.art.anim-shoulder #torsoG,
-.art.anim-shoulder #armLeftG,
-.art.anim-shoulder #armRightG{animation:shrug 1.2s ease-in-out 2}
-@keyframes shrug{
-  0%,100%{transform:translateY(0)}
-  35%{transform:translateY(-5px)}
-  65%{transform:translateY(1px)}
-}
-.art.anim-arm #armLeftG{transform-origin:50% 5%;animation:armWave 1.2s ease-in-out 2}
-@keyframes armWave{
-  0%,100%{transform:rotate(0)}
-  25%{transform:rotate(-18deg)}
-  50%{transform:rotate(10deg)}
-  75%{transform:rotate(-12deg)}
-}
-.art.anim-hand #handLeftG{animation:handWave 1s ease-in-out 2}
-@keyframes handWave{
-  0%,100%{transform:rotate(0)}
-  25%{transform:rotate(-18deg)}
-  50%{transform:rotate(14deg)}
-  75%{transform:rotate(-8deg)}
-}
-.art.anim-knee #legLeftG{transform-origin:50% 0%;animation:kneeBend 1.2s ease-in-out 2}
-@keyframes kneeBend{
-  0%,100%{transform:rotate(0)}
-  30%{transform:rotate(-8deg)}
-  60%{transform:rotate(4deg)}
-}
-.art.anim-feet #footLeftG,
-.art.anim-feet #footRightG{animation:footTap 1s ease-in-out 2}
-@keyframes footTap{
-  0%,100%{transform:translateY(0)}
-  40%{transform:translateY(-6px)}
-  60%{transform:translateY(0)}
-}
-.art.anim-toe #footLeftG{transform-origin:20% 50%;animation:toeWiggle 1s ease-in-out 2}
-@keyframes toeWiggle{
-  0%,100%{transform:rotate(0)}
-  25%{transform:rotate(-5deg)}
-  50%{transform:rotate(4deg)}
-  75%{transform:rotate(-2deg)}
-}
-.art.anim-bottom #shortsG{animation:shortsPulse 1.4s ease-in-out 2}
-@keyframes shortsPulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.04)}
-}
-.art.anim-between #betweenShield{animation:guardPulse 1.6s ease-in-out 2}
-@keyframes guardPulse{
-  0%,100%{transform:scale(1);opacity:.55}
-  50%{transform:scale(1.08);opacity:1}
-}
-
-/* small companion */
+.art:hover{filter:drop-shadow(0 18px 24px rgba(90,40,60,.28))}
 .art-sm{
   position:absolute;
   right:12%;
-  top:16%;
-  font-size:44px;
+  bottom:10%;
+  font-size:40px;
   line-height:1;
   transform-origin:50% 60%;
-  filter:drop-shadow(0 8px 10px rgba(40,80,58,.16));
+  filter:drop-shadow(0 8px 10px rgba(90,40,60,.18));
 }
 .art-sm::after{
   content:attr(data-label);
@@ -388,6 +193,106 @@ body{
   color:var(--ink-soft);
 }
 .art-sm[hidden]{display:none}
+
+/* one motion per stop: the intro pounce, a paw at the yarn, a dash,
+   then a mood each — squish, roll, bask, purr, puff, rumble, swat,
+   hush, lap, and finally shrinking down to tiny */
+.art.anim-pounce{animation:pounceIn .9s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes pounceIn{
+  0%{transform:translateY(-30px) scale(.7);opacity:0}
+  55%{transform:translateY(6px) scale(1.08,.94);opacity:1}
+  75%{transform:translateY(-4px) scale(.98,1.02)}
+  100%{transform:translateY(0) scale(1)}
+}
+.art.anim-bat{transform-origin:62% 70%;animation:bat 1.1s ease-in-out 2}
+@keyframes bat{
+  0%,100%{transform:rotate(0)}
+  20%{transform:rotate(-18deg)}
+  45%{transform:rotate(14deg)}
+  65%{transform:rotate(-8deg)}
+  82%{transform:rotate(4deg)}
+}
+.art.anim-zoom{animation:zoom 1.5s cubic-bezier(.3,1.1,.4,1) 2}
+@keyframes zoom{
+  0%,100%{transform:translateX(0) scale(1,1)}
+  18%{transform:translateX(-58px) scale(1.06,.96)}
+  36%{transform:translateX(58px) scale(.94,1.06)}
+  54%{transform:translateX(-28px)}
+  72%{transform:translateX(20px)}
+  88%{transform:translateX(-6px)}
+}
+.art.anim-squish{animation:squish 1.8s ease-in-out 2}
+@keyframes squish{
+  0%,100%{transform:scale(1,1) translateY(0)}
+  30%{transform:scale(1.12,.84) translateY(8px)}
+  55%{transform:scale(.9,1.14) translateY(-6px)}
+  78%{transform:scale(1.05,.96) translateY(2px)}
+}
+.art.anim-roll{animation:rollAround 1.8s cubic-bezier(.3,1.1,.4,1) 2}
+@keyframes rollAround{
+  0%,100%{transform:rotate(0) translateX(0)}
+  40%{transform:rotate(160deg) translateX(38px)}
+  70%{transform:rotate(280deg) translateX(-22px)}
+}
+.art.anim-bask{animation:bask 2.6s ease-in-out 2}
+@keyframes bask{
+  0%,100%{transform:scale(1) rotate(0)}
+  50%{transform:scale(1.1) rotate(4deg);filter:drop-shadow(0 0 26px rgba(240,134,43,.8))}
+}
+.art.anim-purr{animation:purr 1.4s linear 2}
+@keyframes purr{
+  0%,100%{transform:translate(0,0) rotate(0)}
+  10%{transform:translate(-2px,0) rotate(-1deg)}
+  20%{transform:translate(2px,0) rotate(1deg)}
+  30%{transform:translate(-2px,0) rotate(-1deg)}
+  40%{transform:translate(2px,0) rotate(1deg)}
+  50%{transform:translate(-1px,0) rotate(-.5deg)}
+  60%{transform:translate(1px,0) rotate(.5deg)}
+  70%{transform:translate(-1px,0) rotate(-.5deg)}
+  80%{transform:translate(1px,0) rotate(.5deg)}
+  90%{transform:translate(-.5px,0)}
+}
+.art.anim-fluff{animation:fluff 1.7s cubic-bezier(.3,1.2,.4,1) 2}
+@keyframes fluff{
+  0%,100%{transform:scale(1,1)}
+  30%{transform:scale(1.22,1.18)}
+  55%{transform:scale(.96,.98)}
+  75%{transform:scale(1.08,1.06)}
+}
+.art.anim-rumble{transform-origin:50% 80%;animation:rumble 1.4s ease-in-out 2}
+@keyframes rumble{
+  0%,100%{transform:scale(1,1) rotate(0)}
+  20%{transform:scale(1.08,.94) rotate(-3deg)}
+  40%{transform:scale(.96,1.06) rotate(3deg)}
+  60%{transform:scale(1.06,.95) rotate(-2deg)}
+  80%{transform:scale(.98,1.02) rotate(1deg)}
+}
+.art.anim-swat{transform-origin:40% 65%;animation:swat 1.15s cubic-bezier(.3,1.1,.4,1) 2}
+@keyframes swat{
+  0%,100%{transform:rotate(0) translateX(0)}
+  15%{transform:rotate(18deg) translateX(10px)}
+  30%{transform:rotate(-20deg) translateX(-14px)}
+  45%{transform:rotate(12deg) translateX(8px)}
+  60%{transform:rotate(-7deg) translateX(-4px)}
+}
+.art.anim-hush{animation:hush 2s ease-in-out 2}
+@keyframes hush{
+  0%,100%{transform:scale(1) translateY(0);opacity:1}
+  50%{transform:scale(.9) translateY(6px);opacity:.86}
+}
+.art.anim-lap{transform-origin:50% 78%;animation:lap 1.15s ease-in-out 3}
+@keyframes lap{
+  0%,100%{transform:rotate(0) translateY(0)}
+  35%{transform:rotate(-9deg) translateY(10px)}
+  60%{transform:rotate(-3deg) translateY(2px)}
+}
+.art.anim-shrink{animation:shrink 1.8s cubic-bezier(.3,1.05,.4,1) 2}
+@keyframes shrink{
+  0%,100%{transform:scale(1)}
+  30%{transform:scale(.45)}
+  60%{transform:scale(.45)}
+  80%{transform:scale(.62)}
+}
 
 /* particles */
 .fx{position:absolute;inset:0;pointer-events:none}
@@ -512,7 +417,7 @@ body{
 
 <div class="app">
   <div class="head">
-    <div class="prog" id="prog">1 / 16</div>
+    <div class="prog" id="prog">1 / 13</div>
   </div>
 
   <nav class="chips" id="chips" aria-label="选择单词"></nav>
@@ -520,15 +425,15 @@ body{
   <main class="card" id="card">
     <div class="art-wrap">
       <div class="glow"></div>
-      <div class="art" id="art" role="button" tabindex="0" aria-label="点击朗读单词">🦟</div>
-      <div class="art-sm" id="artSm" data-label="mosquito" hidden>🦟</div>
+      <div class="art" id="art" role="button" tabindex="0" aria-label="点击朗读单词">🐈</div>
+      <div class="art-sm" id="artSm" data-label="kitty" hidden>🐈</div>
       <div class="fx" id="fx"></div>
     </div>
 
     <div class="meta">
-      <span class="w" id="mWord">mosquito</span>
-      <span class="ipa" id="mIpa">/məˈskiːtoʊ/</span>
-      <span class="cn" id="mCn">蚊子</span>
+      <span class="w" id="mWord">pet</span>
+      <span class="ipa" id="mIpa">/pet/</span>
+      <span class="cn" id="mCn">抚摸；宠物</span>
     </div>
 
     <div class="coach" id="coach"><span class="hand">👆</span>点图片或 ▶ 听单词发音</div>
@@ -549,119 +454,20 @@ body{
   "use strict";
 
   var LESSONS = [
-    { word:"mosquito",           ipa:"/məˈskiːtoʊ/",          cn:"蚊子",             art:"🦟", scale:.92, color:"#6E8B3D", ink:"#4C6324", anim:"buzz",  fx:["〰️","💨","✨"] },
-    { word:"bite",               ipa:"/baɪt/",                cn:"叮；咬",           art:"😖", scale:.95, color:"#E5484D", ink:"#B0272D", anim:"bite",  fx:["💢","🦟","✨"], small:"🦟", smallLabel:"mosquito" },
-    { word:"body",               ipa:"/ˈbɑːdi/",              cn:"身体",             part:"body",     chip:"👤", color:"#4C9A7A", ink:"#2E7458", anim:"body",      fx:["✨","👤","💚"] },
-    { word:"head",               ipa:"/hed/",                 cn:"头",               part:"head",     chip:"🙂", face:true, color:"#E59A2F", ink:"#9A6200", anim:"head",      fx:["✨","🙂","💫"] },
-    { word:"nose",               ipa:"/noʊz/",                cn:"鼻子",             part:"nose",     chip:"👃", face:true, color:"#E2718E", ink:"#AD3D5B", anim:"nose",      fx:["✨","👃","💗"] },
-    { word:"chin",               ipa:"/tʃɪn/",                cn:"下巴",             part:"chin",     chip:"😊", face:true, color:"#C9794A", ink:"#8E4B24", anim:"chin",      fx:["✨","😊","💫"] },
-    { word:"shoulder",           ipa:"/ˈʃoʊldər/",            cn:"肩膀",             part:"shoulder", chip:"🤷", color:"#4F8FD8", ink:"#2A609E", anim:"shoulder",  fx:["✨","🤷","💙"] },
-    { word:"arm",                ipa:"/ɑːrm/",                cn:"手臂",             part:"arm",      chip:"💪", color:"#E57A3C", ink:"#A94E18", anim:"arm",       fx:["✨","💪","💫"] },
-    { word:"hand",               ipa:"/hænd/",                cn:"手",               part:"hand",     chip:"✋", color:"#D65C8E", ink:"#A33462", anim:"hand",      fx:["✨","✋","💗"] },
-    { word:"knee",               ipa:"/niː/",                 cn:"膝盖",             part:"knee",     chip:"🦵", color:"#8A6ED6", ink:"#5944A4", anim:"knee",      fx:["✨","🦵","💜"] },
-    { word:"feet",               ipa:"/fiːt/",                cn:"脚（复数）",       part:"feet",     chip:"🦶", color:"#2F9FB8", ink:"#16738A", anim:"feet",      fx:["✨","🦶","💧"] },
-    { word:"toe",                ipa:"/toʊ/",                 cn:"脚趾",             part:"toe",      chip:"🦶", color:"#D9A227", ink:"#8F6600", anim:"toe",       fx:["✨","🦶","💛"] },
-    { word:"blood",              ipa:"/blʌd/",                cn:"血",               art:"🩸", scale:.95, color:"#C62828", ink:"#981B1B", anim:"drip",  fx:["🩸","💧","✨"] },
-    { word:"bottom",             ipa:"/ˈbɑːtəm/",             cn:"屁股（隐私部位）", part:"bottom",   chip:"🩲", color:"#8E5BA6", ink:"#653B7A", anim:"bottom",    fx:["✨","🛡️","💜"], back:true },
-    { word:"between our legs",   ipa:"/bɪˈtwiːn aʊər leɡz/",  cn:"两腿之间（隐私部位）", part:"between", chip:"🛡️", color:"#B0455E", ink:"#832B42", anim:"between", fx:["🛡️","✨","💗"] },
-    { word:"trusted adult",      ipa:"/ˈtrʌstɪd ˈædʌlt/",     cn:"可信任的成年人",   art:"🧑‍🤝‍🧑", scale:.92, color:"#3F8F6B", ink:"#256B4C", anim:"trust", fx:["💚","🤝","✨"] }
+    { word:"pet",                ipa:"/pet/",                  cn:"抚摸；宠物",   art:"🐈",  scale:1,    color:"#E86A8A", ink:"#B32862", anim:"pounce", fx:["💗","🐾","✨"] },
+    { word:"yarn",               ipa:"/jɑːrn/",                cn:"毛线球",       art:"🧶",  scale:1,    color:"#F2764B", ink:"#B4421C", anim:"bat",    fx:["🧶","🐾","✨"] },
+    { word:"fast and quick",     ipa:"/fæst ənd kwɪk/",        cn:"又快又敏捷",   art:"💨",  scale:1,    color:"#F5B301", ink:"#9A6B00", anim:"zoom",   fx:["💨","🐾","✨"], small:"🐈", smallLabel:"kitty" },
+    { word:"soft kitty",         ipa:"/sɔːft ˈkɪti/",          cn:"柔软的猫咪",   art:"☁️",  scale:1,    color:"#4FA8D8", ink:"#256E9C", anim:"squish", fx:["☁️","💗","✨"], small:"🐱", smallLabel:"kitty" },
+    { word:"little ball of fur", ipa:"/ˈlɪtl bɔːl əv fɜːr/",   cn:"小毛球",       art:"🐈",  scale:.82,  color:"#C98A3E", ink:"#8E5A1A", anim:"roll",   fx:["🧶","✨","🐾"] },
+    { word:"warm kitty",         ipa:"/wɔːrm ˈkɪti/",          cn:"温暖的猫咪",   art:"☀️",  scale:1,    color:"#F0862B", ink:"#B85408", anim:"bask",   fx:["☀️","💛","✨"], small:"🐈", smallLabel:"kitty" },
+    { word:"purr",               ipa:"/pɜːr/",                 cn:"呼噜声",       art:"😽",  scale:1,    color:"#8E7BD8", ink:"#5F4CA8", anim:"purr",   fx:["💗","🎵","✨"] },
+    { word:"fluffy kitty",       ipa:"/ˈflʌfi ˈkɪti/",         cn:"毛茸茸的猫咪", art:"🐈",  scale:1.02, color:"#E2568C", ink:"#B32862", anim:"fluff",  fx:["☁️","✨","💗"] },
+    { word:"hungry kitty",       ipa:"/ˈhʌŋɡri ˈkɪti/",        cn:"饿了的猫咪",   art:"🐟",  scale:1,    color:"#2F9FB8", ink:"#16738A", anim:"rumble", fx:["🐟","🍽️","✨"], small:"🐈", smallLabel:"kitty" },
+    { word:"naughty kitty",      ipa:"/ˈnɔːti ˈkɪti/",         cn:"淘气的猫咪",   art:"😼",  scale:1,    color:"#E5484D", ink:"#C0272D", anim:"swat",   fx:["🐾","💥","✨"] },
+    { word:"quiet kitty",        ipa:"/ˈkwaɪət ˈkɪti/",        cn:"安静的猫咪",   art:"🤫",  scale:1,    color:"#6A8FD8", ink:"#4463A8", anim:"hush",   fx:["💤","✨","🌙"], small:"🐈", smallLabel:"kitty" },
+    { word:"thirsty kitty",      ipa:"/ˈθɜːrsti ˈkɪti/",       cn:"渴了的猫咪",   art:"🥛",  scale:1,    color:"#2FA8E0", ink:"#16719E", anim:"lap",    fx:["💧","🥛","✨"], small:"🐈", smallLabel:"kitty" },
+    { word:"tiny kitty",         ipa:"/ˈtaɪni ˈkɪti/",         cn:"小小的猫咪",   art:"🐈",  scale:.95,  color:"#5BAE9E", ink:"#2F7D6E", anim:"shrink", fx:["✨","🐾","💗"] }
   ];
-
-  var HIGHLIGHTS = {
-    body:     '<ellipse class="ring" cx="60" cy="105" rx="39" ry="86"/>',
-    shoulder: '<circle class="ring" cx="43" cy="70" r="13"/>',
-    arm:      '<circle class="ring" cx="37" cy="90" r="11"/>',
-    hand:     '<circle class="ring" cx="31" cy="117" r="12"/>',
-    knee:     '<circle class="ring" cx="53" cy="153" r="11"/>',
-    feet:     '<ellipse class="ring" cx="51" cy="184" rx="15" ry="9"/>',
-    toe:      '<circle class="ring" cx="42" cy="184" r="7"/>',
-    bottom:   '<rect class="ring" x="44" y="108" width="32" height="27" rx="9"/>',
-    between:  '<g id="betweenShield"><path class="shield" d="M60 110 l11 5 v9 c0 8 -11 14 -11 14 s-11 -6 -11 -14 v-9 z"/></g>'
-  };
-
-  var FACE_HIGHLIGHTS = {
-    head: '<circle class="ring" cx="80" cy="85" r="61"/>',
-    nose: '<ellipse class="ring" cx="80" cy="94" rx="14" ry="11"/>',
-    chin: '<path class="ring" d="M56 128 Q80 146 104 128"/>'
-  };
-
-  function faceSvg(part){
-    return '<svg class="figure face-figure" viewBox="0 0 160 180" aria-hidden="true">' +
-      '<g id="headG">' +
-        '<circle class="skin" cx="23" cy="88" r="11"/>' +
-        '<circle class="skin" cx="137" cy="88" r="11"/>' +
-        '<circle class="skin" cx="80" cy="85" r="58"/>' +
-        '<path class="hair" d="M22 84 C22 38 44 20 80 20 C116 20 138 38 138 84 C138 58 120 48 80 48 C40 48 22 58 22 84 Z"/>' +
-        '<circle class="eye" cx="60" cy="80" r="4.5"/>' +
-        '<circle class="eye" cx="100" cy="80" r="4.5"/>' +
-        '<path class="line" d="M80 84 q5 8 0 11 q-4 1 -6 -1" stroke-width="3"/>' +
-        '<path class="smile" d="M60 112 Q80 126 100 112" stroke-width="3.5"/>' +
-        '<circle class="blush" cx="47" cy="101" r="7"/>' +
-        '<circle class="blush" cx="113" cy="101" r="7"/>' +
-        (FACE_HIGHLIGHTS[part] || "") +
-      '</g>' +
-    '</svg>';
-  }
-
-  function bodySvg(part, back){
-    var hair = back
-      ? '<path class="hair" d="M38 41 C38 12 47 6 60 6 C73 6 82 12 82 41 C82 51 74 57 60 57 C46 57 38 51 38 41 Z"/>' +
-        '<path d="M60 9 v46" stroke="rgba(255,255,255,.12)" stroke-width="2" stroke-linecap="round"/>'
-      : '<path class="hair" d="M39 36 C39 15 48 7 60 7 C72 7 81 15 81 36 C81 27 74 22 60 22 C46 22 39 27 39 36 Z"/>';
-
-    var face = back ? "" :
-      '<circle class="eye" cx="52" cy="34" r="1.8"/>' +
-      '<circle class="eye" cx="68" cy="34" r="1.8"/>' +
-      '<path class="line" d="M60 37 q2 3 0 5"/>' +
-      '<path class="smile" d="M54 43 Q60 48 66 43"/>';
-
-    var spot = HIGHLIGHTS[part] || "";
-
-    return '<svg class="figure" viewBox="0 0 120 210" aria-hidden="true">' +
-      '<g id="figure">' +
-        '<g id="legRightG">' +
-          '<path class="leg" d="M66 128 L68 177"/>' +
-          '<g id="footRightG"><ellipse class="shoe" cx="69" cy="184" rx="12" ry="6"/></g>' +
-        '</g>' +
-        '<g id="legLeftG">' +
-          '<path class="leg" d="M54 128 L52 177"/>' +
-          '<g id="footLeftG">' +
-            '<ellipse class="shoe" cx="51" cy="184" rx="12" ry="6"/>' +
-            (part === "feet" || part === "toe" ? spot : "") +
-          '</g>' +
-          (part === "knee" ? spot : "") +
-        '</g>' +
-        '<g id="shortsG">' +
-          '<rect class="shorts" x="42" y="106" width="36" height="31" rx="10"/>' +
-          '<path d="M60 110 v26" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/>' +
-          (part === "bottom" || part === "between" ? spot : "") +
-        '</g>' +
-        '<g id="torsoG">' +
-          '<rect class="shirt" x="42" y="60" width="36" height="52" rx="13"/>' +
-          '<path class="heart" d="M60 73c-3-6-12-2-9 4 2 4 9 8 9 8s7-4 9-8c3-6-6-10-9-4z"/>' +
-          (part === "shoulder" ? spot : "") +
-        '</g>' +
-        '<g id="armLeftG">' +
-          '<path class="arm" d="M43 70 L32 111"/>' +
-          '<g id="handLeftG">' +
-            '<circle class="skin" cx="31" cy="117" r="7"/>' +
-            (part === "hand" ? spot : "") +
-          '</g>' +
-          (part === "arm" ? spot : "") +
-        '</g>' +
-        '<g id="armRightG">' +
-          '<path class="arm" d="M77 70 L88 111"/>' +
-          '<g id="handRightG"><circle class="skin" cx="89" cy="117" r="7"/></g>' +
-        '</g>' +
-        '<rect class="skin" x="55" y="52" width="10" height="12" rx="4"/>' +
-        '<g id="headG">' +
-          '<circle class="skin" cx="60" cy="36" r="21"/>' +
-          hair + face +
-        '</g>' +
-        (part === "body" ? spot : "") +
-      '</g>' +
-    '</svg>';
-  }
 
   var root = document.documentElement;
   var $ = function(id){ return document.getElementById(id); };
@@ -814,13 +620,7 @@ body{
     }
 
     elArt.className = "art";
-    if(L.part){
-      elArt.innerHTML = L.face ? faceSvg(L.part) : bodySvg(L.part, L.back);
-    } else {
-      elArt.textContent = L.art;
-    }
-    elArt.setAttribute("aria-label", L.word + "，点击朗读");
-
+    elArt.textContent = L.art;
     if(L.small){
       elArtSm.textContent = L.small;
       elArtSm.setAttribute("data-label", L.smallLabel || "");

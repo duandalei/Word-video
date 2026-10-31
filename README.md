@@ -18,10 +18,10 @@
 
 | 故事 | 中文 | 单词数 | 在线打开 |
 | --- | --- | ---: | --- |
-| Jungle Stream | 丛林小河 | 17 | [打开](https://duandalei.github.io/Word-video/jungle-stream.html) |
-| Rain or Shine | 晴天雨天 | 17 | [打开](https://duandalei.github.io/Word-video/rain-or-shine.html) |
-| Mosquito Bite | 蚊子包 | 16 | [打开](https://duandalei.github.io/Word-video/mosquito-bite.html) |
-| Soft Kitty | 小猫的一天 | 13 | [打开](https://duandalei.github.io/Word-video/soft-kitty.html) |
+| L6 Row your boat | 丛林小河 | 17 | [打开](https://duandalei.github.io/Word-video/l6-row-your-boat.html) |
+| L3 rain rain go away | 晴天雨天 | 17 | [打开](https://duandalei.github.io/Word-video/l3-rain-rain-go-away.html) |
+| L5 Go away mosquito | 蚊子包 | 16 | [打开](https://duandalei.github.io/Word-video/l5-go-away-mosquito.html) |
+| L2 I have a pet cat | 小猫的一天 | 13 | [打开](https://duandalei.github.io/Word-video/l2-i-have-a-pet-cat.html) |
 | From Seed to Tree | 从种子到大树 | 13 | [打开](https://duandalei.github.io/Word-video/apple-tree.html) |
 | A Day at the Zoo | 动物园的一天 | 11 | [打开](https://duandalei.github.io/Word-video/zoo.html) |
 | Fruit Words | 水果形容词 | 8 | [打开](https://duandalei.github.io/Word-video/fruit-words.html) |
@@ -41,11 +41,11 @@
 ```text
 .
 ├── index.html            # 故事书架首页
-├── jungle-stream.html    # Jungle Stream
-├── rain-or-shine.html    # Rain or Shine
-├── mosquito-bite.html    # Mosquito Bite
-├── soft-kitty.html       # Soft Kitty
-├── apple-tree.html       # From Seed to Tree
+├── l6-row-your-boat.html         # L6 Row your boat
+├── l3-rain-rain-go-away.html     # L3 rain rain go away
+├── l5-go-away-mosquito.html      # L5 Go away mosquito
+├── l2-i-have-a-pet-cat.html      # L2 I have a pet cat
+├── apple-tree.html               # From Seed to Tree
 ├── zoo.html              # A Day at the Zoo
 ├── fruit-words.html      # Fruit Words
 ├── CLAUDE.md             # 项目协作说明
