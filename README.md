@@ -22,7 +22,7 @@
 | L3 rain rain go away | 晴天雨天 | 17 | [打开](https://duandalei.github.io/Word-video/l3-rain-rain-go-away.html) |
 | L5 Go away mosquito | 蚊子包 | 16 | [打开](https://duandalei.github.io/Word-video/l5-go-away-mosquito.html) |
 | L2 I have a pet cat | 小猫的一天 | 13 | [打开](https://duandalei.github.io/Word-video/l2-i-have-a-pet-cat.html) |
-| From Seed to Tree | 从种子到大树 | 13 | [打开](https://duandalei.github.io/Word-video/apple-tree.html) |
+| L1 Let’s go to the supermarket | 从种子到大树 | 13 | [打开](https://duandalei.github.io/Word-video/L1%20Let%E2%80%99s%20go%20to%20the%20supermarket.html) |
 | A Day at the Zoo | 动物园的一天 | 11 | [打开](https://duandalei.github.io/Word-video/zoo.html) |
 | Fruit Words | 水果形容词 | 8 | [打开](https://duandalei.github.io/Word-video/fruit-words.html) |
 
@@ -45,7 +45,7 @@
 ├── l3-rain-rain-go-away.html     # L3 rain rain go away
 ├── l5-go-away-mosquito.html      # L5 Go away mosquito
 ├── l2-i-have-a-pet-cat.html      # L2 I have a pet cat
-├── apple-tree.html               # From Seed to Tree
+├── L1 Let’s go to the supermarket.html  # L1 Let’s go to the supermarket
 ├── zoo.html              # A Day at the Zoo
 ├── fruit-words.html      # Fruit Words
 ├── CLAUDE.md             # 项目协作说明

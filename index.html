@@ -448,27 +448,6 @@ button,a{-webkit-tap-highlight-color:transparent}
 .cover-zoo{--cover:#B96F1D;--edge:#81490D;--cover-ink:#FFF8E8}
 .cover-fruit{--cover:#C14D36;--edge:#89321F;--cover-ink:#FFF6EC}
 
-/* ── Footer ─────────────────────────────────────────── */
-.footer{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:18px;
-  margin-top:clamp(38px,5vw,62px);
-  padding-top:22px;
-  border-top:1px solid var(--line);
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.6;
-}
-.footer p{margin:0}
-.footer a{
-  font-weight:900;
-  text-decoration:none;
-  border-bottom:1px solid color-mix(in srgb, var(--muted) 40%, transparent);
-}
-.footer a:hover{color:var(--ink);border-color:var(--ink)}
-
 @media (max-width:980px){
   .hero{grid-template-columns:1fr;gap:34px}
   .hero h1{max-width:12ch}
@@ -480,8 +459,6 @@ button,a{-webkit-tap-highlight-color:transparent}
   .shelf-head p{max-width:38ch;margin-top:10px;text-align:left}
   .books{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
   .book{min-height:270px;padding:17px 14px 16px 24px}
-  .footer{display:block}
-  .footer a{display:inline-block;margin-top:6px}
 }
 @media (max-width:390px){
   .page{padding-inline:14px}
@@ -598,13 +575,13 @@ button,a{-webkit-tap-highlight-color:transparent}
           </span>
         </a>
 
-        <a class="book cover-tree" href="apple-tree.html" aria-label="打开 From Seed to Tree，从种子到大树">
+        <a class="book cover-tree" href="L1%20Let%E2%80%99s%20go%20to%20the%20supermarket.html" aria-label="打开 L1 Let’s go to the supermarket，从种子到大树">
           <span class="book-top">
             <span class="book-emoji" aria-hidden="true">🌳</span>
             <span class="book-count">13 words</span>
           </span>
           <span class="book-info">
-            <span class="book-title">From Seed to Tree</span>
+            <span class="book-title">L1 Let’s go to the supermarket</span>
             <span class="book-cn">从种子到大树</span>
             <span class="book-desc">一颗苹果种子，长成一棵树。</span>
             <span class="book-open">翻开这本</span>
@@ -640,10 +617,6 @@ button,a{-webkit-tap-highlight-color:transparent}
     </section>
   </main>
 
-  <footer class="footer">
-    <p>纯网页动画，打开就能听；建议使用 Chrome 或 Edge。</p>
-    <a href="https://github.com/duandalei/Word-video" target="_blank" rel="noreferrer">查看项目源码</a>
-  </footer>
 </div>
 </body>
 </html>
