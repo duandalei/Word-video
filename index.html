@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word Video · 单词动画</title>
+<meta name="description" content="7 个互动英语单词动画故事，共 95 个单词，带发音、音标和中文释义。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚣%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;900&display=swap">
+<style>
+/* ── Design plan ────────────────────────────────────────────────
+   Subject: a shelf of seven animated picture-book lessons. The
+            landing page's job is to let a learner pick a story and
+            start, so the covers carry the titles, the word counts
+            and a one-line scene hint.
+   Visual : a small word river runs through the hero — boat, banks,
+            floating vocabulary — while the collection below sits
+            as a set of cloth-bound books, not a grid of app cards.
+   Color  : oat-mint paper, forest ink, and a muted wooden shelf
+            under seven distinct cover colours. Sun yellow is the
+            single warm accent.
+   Type   : Baloo 2 for display and book titles; Nunito for body
+            and labels. Chinese falls back to PingFang / YaHei.
+   Layout : left-aligned hero with a river scene on the right, then
+            a shelf section with 4 / 3 / 2 cover columns.
+   ─────────────────────────────────────────────────────────────── */
+:root{
+  --paper:#F4F6EC;
+  --paper-2:#EAF0DF;
+  --ink:#1F3027;
+  --muted:#6D7D70;
+  --line:#D8E0CE;
+  --card:#FFFEF8;
+  --sun:#F1C24E;
+  --coral:#D85B42;
+  --wood:#C9AD83;
+  --tag-bg:#FFFCF3;
+  --tag-ink:#345244;
+  --scene-sky:#F8E6C1;
+  --scene-hill:#A7CE97;
+  --scene-hill-2:#78B18C;
+  --scene-water:#92CFBE;
+  --scene-water-2:#5DB09E;
+  --shadow:0 34px 70px -46px rgba(33,63,44,.55);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#101713;
+    --paper-2:#17231B;
+    --ink:#EFF5E9;
+    --muted:#A2B3A5;
+    --line:#2B3A30;
+    --card:#18241D;
+    --sun:#E5B945;
+    --coral:#E4775E;
+    --wood:#5A4630;
+    --tag-bg:#18261E;
+    --tag-ink:#D9E7DA;
+    --scene-sky:#172B29;
+    --scene-hill:#294B3B;
+    --scene-hill-2:#1E3B30;
+    --scene-water:#1A4B47;
+    --scene-water-2:#103A37;
+    --shadow:0 34px 70px -38px rgba(0,0,0,.85);
+    color-scheme: dark;
+  }
+}
+
+html{scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100%;
+  font-family:'Nunito',system-ui,-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  font-size:16px;
+  color:var(--ink);
+  background:
+    radial-gradient(920px 540px at 88% -8%, rgba(241,194,78,.18), transparent 68%),
+    radial-gradient(760px 520px at -6% 34%, rgba(120,177,140,.14), transparent 72%),
+    var(--paper);
+  -webkit-tap-highlight-color:transparent;
+}
+a{color:inherit}
+button,a{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--ink);outline-offset:4px;border-radius:4px}
+
+.page{
+  width:min(1120px,100%);
+  margin:0 auto;
+  padding:24px clamp(16px,3.5vw,36px) 42px;
+}
+
+/* ── Top bar ────────────────────────────────────────── */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:4px 0 18px;
+}
+.brand{
+  display:inline-flex;
+  align-items:center;
+  gap:11px;
+  text-decoration:none;
+  line-height:1;
+}
+.brand-mark{
+  display:grid;
+  place-items:center;
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:var(--ink);
+  color:var(--paper);
+  font-size:21px;
+  transform:rotate(-3deg);
+  box-shadow:0 8px 16px -12px rgba(31,48,39,.8);
+}
+.brand-name{
+  display:block;
+  font-family:'Baloo 2','Nunito',sans-serif;
+  font-weight:800;
+  font-size:19px;
+  letter-spacing:-.01em;
+}
+.brand-sub{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.repo{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:900;
+  text-decoration:none;
+  padding:8px 2px;
+}
+.repo:hover{color:var(--ink)}
+.repo svg{width:16px;height:16px;fill:currentColor}
+
+/* ── Hero ───────────────────────────────────────────── */
+.hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.02fr) minmax(320px,.98fr);
+  align-items:center;
+  gap:clamp(32px,5.5vw,72px);
+  padding:clamp(34px,5.5vw,74px) 0 clamp(46px,7vw,88px);
+}
+.hero h1{
+  margin:0;
+  max-width:11ch;
+  font-family:'Baloo 2','Nunito','PingFang SC','Microsoft YaHei',sans-serif;
+  font-size:clamp(46px,6.2vw,82px);
+  font-weight:800;
+  line-height:1.08;
+  letter-spacing:-.025em;
+  text-wrap:balance;
+}
+.highlight{
+  position:relative;
+  white-space:nowrap;
+  background-image:linear-gradient(transparent 64%, rgba(241,194,78,.55) 64%, rgba(241,194,78,.55) 92%, transparent 92%);
+  border-radius:3px;
+}
+.lede{
+  max-width:36ch;
+  margin:22px 0 0;
+  color:var(--muted);
+  font-size:clamp(15px,1.5vw,17px);
+  line-height:1.75;
+}
+.lede strong{color:var(--ink);font-weight:900}
+.hero-cta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:48px;
+  margin-top:28px;
+  padding:0 22px;
+  border-radius:999px;
+  background:var(--ink);
+  color:var(--paper);
+  font-size:15px;
+  font-weight:900;
+  text-decoration:none;
+  box-shadow:0 14px 28px -18px rgba(31,48,39,.9);
+  transition:transform .16s ease, background .16s ease;
+}
+.hero-cta:hover{transform:translateY(-2px);background:var(--coral)}
+
+/* river scene */
+.scene{
+  position:relative;
+  height:clamp(300px,32vw,398px);
+  border:1px solid var(--line);
+  border-radius:36px;
+  overflow:hidden;
+  isolation:isolate;
+  background:
+    radial-gradient(circle at 76% 17%, rgba(255,255,255,.3), transparent 22%),
+    linear-gradient(var(--scene-sky) 0 58%, var(--scene-water) 58% 100%);
+  box-shadow:var(--shadow);
+}
+.scene::before{
+  content:"";
+  position:absolute;
+  left:-12%;right:-12%;bottom:36%;
+  height:28%;
+  background:
+    radial-gradient(48% 100% at 20% 100%, var(--scene-hill) 0 70%, transparent 71%),
+    radial-gradient(66% 120% at 82% 100%, var(--scene-hill-2) 0 70%, transparent 71%);
+  z-index:0;
+}
+.scene::after{
+  content:"";
+  position:absolute;
+  left:-10%;right:-10%;bottom:-2%;
+  height:44%;
+  background:
+    radial-gradient(62% 100% at 28% 100%, var(--scene-water-2) 0 70%, transparent 71%),
+    radial-gradient(56% 100% at 82% 100%, var(--scene-water-2) 0 70%, transparent 71%);
+  opacity:.55;
+  z-index:1;
+}
+.scene-sun{
+  position:absolute;
+  top:8%;right:11%;
+  width:clamp(52px,7vw,72px);
+  aspect-ratio:1;
+  border-radius:50%;
+  background:var(--sun);
+  box-shadow:0 0 0 14px rgba(241,194,78,.16), 0 14px 30px rgba(130,99,32,.16);
+  z-index:1;
+}
+.cloud{
+  position:absolute;
+  height:18px;
+  width:72px;
+  border-radius:999px;
+  background:rgba(255,255,255,.5);
+  z-index:1;
+}
+.cloud::before,.cloud::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:inherit;
+}
+.cloud::before{width:28px;height:28px;left:11px;bottom:0}
+.cloud::after{width:20px;height:20px;right:13px;bottom:0}
+.cloud-a{top:20%;left:12%;transform:scale(.8)}
+.cloud-b{top:32%;right:26%;transform:scale(.55);opacity:.7}
+.scene-palm{
+  position:absolute;
+  left:-3%;
+  bottom:28%;
+  z-index:2;
+  font-size:clamp(68px,9vw,98px);
+  line-height:1;
+  transform:rotate(-4deg);
+  filter:drop-shadow(0 12px 14px rgba(33,63,44,.18));
+}
+.scene-croc{
+  position:absolute;
+  right:13%;
+  bottom:7%;
+  z-index:3;
+  font-size:clamp(28px,4vw,40px);
+  line-height:1;
+  transform:rotate(-5deg);
+  filter:drop-shadow(0 8px 10px rgba(20,57,55,.24));
+}
+.scene-boat{
+  position:absolute;
+  left:47%;
+  bottom:17%;
+  z-index:4;
+  font-size:clamp(68px,9vw,92px);
+  line-height:1;
+  transform-origin:50% 78%;
+  filter:drop-shadow(0 16px 16px rgba(20,57,55,.22));
+  animation:boatFloat 5s ease-in-out infinite;
+}
+@keyframes boatFloat{
+  0%,100%{transform:translate(-50%,2px) rotate(-2deg)}
+  50%{transform:translate(-50%,-8px) rotate(2deg)}
+}
+.word-tag{
+  position:absolute;
+  z-index:4;
+  padding:7px 12px;
+  border:1px solid color-mix(in srgb, var(--tag-ink) 18%, transparent);
+  border-radius:999px;
+  background:var(--tag-bg);
+  color:var(--tag-ink);
+  font-family:'Baloo 2','Nunito',sans-serif;
+  font-size:clamp(11px,1.15vw,14px);
+  font-weight:800;
+  line-height:1;
+  box-shadow:0 9px 20px -14px rgba(33,63,44,.55);
+  animation:tagBob 5.5s ease-in-out infinite;
+}
+.tag-gently{left:18%;top:16%;--rot:-4deg}
+.tag-stream{right:9%;top:43%;--rot:3deg;animation-delay:-1.4s}
+.tag-merrily{left:9%;bottom:30%;--rot:2deg;animation-delay:-2.7s}
+.tag-dream{right:18%;bottom:24%;--rot:-3deg;animation-delay:-4s}
+@keyframes tagBob{
+  0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}
+  50%{transform:translateY(-7px) rotate(calc(var(--rot,0deg) + 1.5deg))}
+}
+
+/* ── Shelf ──────────────────────────────────────────── */
+.shelf-section{
+  padding:clamp(34px,5vw,58px) 0 14px;
+  border-top:1px solid var(--line);
+}
+.shelf-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:22px;
+  margin-bottom:24px;
+}
+.shelf-head h2{
+  margin:0;
+  font-family:'Baloo 2','Nunito','PingFang SC','Microsoft YaHei',sans-serif;
+  font-size:clamp(30px,3.5vw,44px);
+  line-height:1;
+  letter-spacing:-.015em;
+}
+.shelf-head p{
+  margin:0;
+  max-width:42ch;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+  text-align:right;
+}
+.books{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:22px;
+}
+.book{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:296px;
+  padding:20px 18px 18px 28px;
+  border-radius:4px 14px 14px 4px;
+  color:var(--cover-ink);
+  text-decoration:none;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.16) 0 8px, rgba(255,255,255,.14) 8px 10px, transparent 10px),
+    linear-gradient(155deg, rgba(255,255,255,.14), transparent 44%),
+    var(--cover);
+  box-shadow:
+    -3px 0 0 var(--edge),
+    0 16px 30px -22px rgba(28,45,33,.7),
+    inset 0 0 0 1px rgba(255,255,255,.08);
+  transform-origin:18% 100%;
+  transition:transform .24s cubic-bezier(.2,.8,.2,1), box-shadow .24s ease;
+  overflow:hidden;
+}
+.book::after{
+  content:"";
+  position:absolute;
+  left:20px;right:16px;bottom:0;
+  height:5px;
+  border-radius:5px 5px 0 0;
+  background:rgba(255,255,255,.16);
+}
+.book:hover{
+  transform:translateY(-7px) rotate(-.6deg);
+  box-shadow:
+    -3px 0 0 var(--edge),
+    0 26px 38px -24px rgba(28,45,33,.8),
+    inset 0 0 0 1px rgba(255,255,255,.1);
+}
+.book-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.book-emoji{
+  font-size:clamp(40px,4.6vw,56px);
+  line-height:1;
+  filter:drop-shadow(0 10px 12px rgba(0,0,0,.18));
+}
+.book-count{
+  flex:none;
+  padding:6px 9px;
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:999px;
+  background:rgba(255,255,255,.1);
+  font-size:10.5px;
+  font-weight:900;
+  line-height:1;
+  letter-spacing:.02em;
+  white-space:nowrap;
+}
+.book-title{
+  display:block;
+  font-family:'Baloo 2','Nunito',sans-serif;
+  font-size:clamp(21px,2.15vw,27px);
+  font-weight:800;
+  line-height:1.02;
+  letter-spacing:-.015em;
+  text-wrap:balance;
+}
+.book-cn{
+  display:block;
+  margin-top:8px;
+  font-size:13px;
+  font-weight:900;
+  opacity:.82;
+}
+.book-desc{
+  display:block;
+  margin-top:7px;
+  font-size:12.5px;
+  line-height:1.5;
+  opacity:.8;
+}
+.book-open{
+  display:block;
+  margin-top:14px;
+  font-size:12px;
+  font-weight:900;
+  opacity:.72;
+}
+.book:hover .book-open{opacity:1}
+.book-info{position:relative;z-index:1}
+
+/* cover palettes */
+.cover-jungle{--cover:#1F6B5C;--edge:#144A3F;--cover-ink:#FFF8E8}
+.cover-rain{--cover:#2E7FA8;--edge:#1B5675;--cover-ink:#F4FBFF}
+.cover-body{--cover:#697B3D;--edge:#465523;--cover-ink:#FCFAE9}
+.cover-kitty{--cover:#B94D6A;--edge:#87364C;--cover-ink:#FFF3F0}
+.cover-tree{--cover:#4F7C3A;--edge:#365827;--cover-ink:#FFF9E9}
+.cover-zoo{--cover:#B96F1D;--edge:#81490D;--cover-ink:#FFF8E8}
+.cover-fruit{--cover:#C14D36;--edge:#89321F;--cover-ink:#FFF6EC}
+
+/* ── Footer ─────────────────────────────────────────── */
+.footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-top:clamp(38px,5vw,62px);
+  padding-top:22px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+}
+.footer p{margin:0}
+.footer a{
+  font-weight:900;
+  text-decoration:none;
+  border-bottom:1px solid color-mix(in srgb, var(--muted) 40%, transparent);
+}
+.footer a:hover{color:var(--ink);border-color:var(--ink)}
+
+@media (max-width:980px){
+  .hero{grid-template-columns:1fr;gap:34px}
+  .hero h1{max-width:12ch}
+  .scene{height:clamp(280px,52vw,380px)}
+  .books{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .shelf-head{display:block}
+  .shelf-head p{max-width:38ch;margin-top:10px;text-align:left}
+  .books{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .book{min-height:270px;padding:17px 14px 16px 24px}
+  .footer{display:block}
+  .footer a{display:inline-block;margin-top:6px}
+}
+@media (max-width:390px){
+  .page{padding-inline:14px}
+  .brand-name{font-size:17px}
+  .book{min-height:252px;padding:15px 12px 14px 22px}
+  .book-title{font-size:20px}
+  .book-desc{font-size:12px}
+  .book-count{font-size:10px;padding:5px 7px}
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Word Video 首页">
+      <span class="brand-mark" aria-hidden="true">🚣</span>
+      <span>
+        <span class="brand-name">Word Video</span>
+        <span class="brand-sub">单词动画</span>
+      </span>
+    </a>
+    <a class="repo" href="https://github.com/duandalei/Word-video" target="_blank" rel="noreferrer">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.93-.89-1.18-.89-1.18-.73-.5.06-.49.06-.49.81.06 1.23.83 1.23.83.72 1.23 1.88.87 2.34.67.07-.52.28-.87.51-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.7 7.7 0 0 1 8 3.86c.68 0 1.36.09 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.88 3.75-3.66 3.95.29.25.54.74.54 1.49v2.21c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+      GitHub
+    </a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <h1>挑一个故事，<br>让单词<span class="highlight">动起来</span>。</h1>
+        <p class="lede">
+          <strong>7 个互动单词动画，95 个英文单词。</strong>
+          每个词都有专属动画、音标、中文释义，点一下还能听发音。
+        </p>
+        <a class="hero-cta" href="#shelf">去书架看看</a>
+      </div>
+
+      <div class="scene" aria-hidden="true">
+        <span class="scene-sun"></span>
+        <span class="cloud cloud-a"></span>
+        <span class="cloud cloud-b"></span>
+        <span class="scene-palm">🌴</span>
+        <span class="word-tag tag-gently">gently</span>
+        <span class="word-tag tag-stream">stream</span>
+        <span class="word-tag tag-merrily">merrily</span>
+        <span class="word-tag tag-dream">dream</span>
+        <span class="scene-boat">🛶</span>
+        <span class="scene-croc">🐊</span>
+      </div>
+    </section>
+
+    <section class="shelf-section" id="shelf" aria-labelledby="shelf-title">
+      <div class="shelf-head">
+        <h2 id="shelf-title">故事书架</h2>
+        <p>7 个故事，95 个单词。点击画面或 ▶ 听发音。</p>
+      </div>
+
+      <div class="books">
+        <a class="book cover-jungle" href="jungle-stream.html" aria-label="打开 Jungle Stream，丛林小河">
+          <span class="book-top">
+            <span class="book-emoji" aria-hidden="true">🚣</span>
+            <span class="book-count">17 words</span>
+          </span>
+          <span class="book-info">
+            <span class="book-title">Jungle Stream</span>
+            <span class="book-cn">丛林小河</span>
+            <span class="book-desc">乘一艘小船，穿过丛林河流。</span>
+            <span class="book-open">翻开这本</span>
+          </span>
+        </a>
+
+        <a class="book cover-rain" href="rain-or-shine.html" aria-label="打开 Rain or Shine，晴天雨天">
+          <span class="book-top">
+            <span class="book-emoji" aria-hidden="true">🌈</span>
+            <span class="book-count">17 words</span>
+          </span>
+          <span class="book-info">
+            <span class="book-title">Rain or Shine</span>
+            <span class="book-cn">晴天雨天</span>
+            <span class="book-desc">从雨天走到晴天，天气会变。</span>
+            <span class="book-open">翻开这本</span>
+          </span>
+        </a>
+
+        <a class="book cover-body" href="mosquito-bite.html" aria-label="打开 Mosquito Bite，蚊子包">
+          <span class="book-top">
+            <span class="book-emoji" aria-hidden="true">🦟</span>
+            <span class="book-count">16 words</span>
+          </span>
+          <span class="book-info">
+            <span class="book-title">Mosquito Bite</span>
+            <span class="book-cn">蚊子包</span>
+            <span class="book-desc">认识身体、边界和可信任的大人。</span>
+            <span class="book-open">翻开这本</span>
+          </span>
+        </a>
+
+        <a class="book cover-kitty" href="soft-kitty.html" aria-label="打开 Soft Kitty，小猫的一天">
+          <span class="book-top">
+            <span class="book-emoji" aria-hidden="true">🐈</span>
+            <span class="book-count">13 words</span>
+          </span>
+          <span class="book-info">
+            <span class="book-title">Soft Kitty</span>
+            <span class="book-cn">小猫的一天</span>
+            <span class="book-desc">跟着小猫过完软软的一天。</span>
+            <span class="book-open">翻开这本</span>
+          </span>
+        </a>
+
+        <a class="book cover-tree" href="apple-tree.html" aria-label="打开 From Seed to Tree，从种子到大树">
+          <span class="book-top">
+            <span class="book-emoji" aria-hidden="true">🌳</span>
+            <span class="book-count">13 words</span>
+          </span>
+          <span class="book-info">
+            <span class="book-title">From Seed to Tree</span>
+            <span class="book-cn">从种子到大树</span>
+            <span class="book-desc">一颗苹果种子，长成一棵树。</span>
+            <span class="book-open">翻开这本</span>
+          </span>
+        </a>
+
+        <a class="book cover-zoo" href="zoo.html" aria-label="打开 A Day at the Zoo，动物园的一天">
+          <span class="book-top">
+            <span class="book-emoji" aria-hidden="true">🦁</span>
+            <span class="book-count">11 words</span>
+          </span>
+          <span class="book-info">
+            <span class="book-title">A Day at the Zoo</span>
+            <span class="book-cn">动物园的一天</span>
+            <span class="book-desc">逛一圈动物园，看动物们做什么。</span>
+            <span class="book-open">翻开这本</span>
+          </span>
+        </a>
+
+        <a class="book cover-fruit" href="fruit-words.html" aria-label="打开 Fruit Words，水果形容词">
+          <span class="book-top">
+            <span class="book-emoji" aria-hidden="true">🍉</span>
+            <span class="book-count">8 words</span>
+          </span>
+          <span class="book-info">
+            <span class="book-title">Fruit Words</span>
+            <span class="book-cn">水果形容词</span>
+            <span class="book-desc">用水果认识大小、味道和口感。</span>
+            <span class="book-open">翻开这本</span>
+          </span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>纯网页动画，打开就能听；建议使用 Chrome 或 Edge。</p>
+    <a href="https://github.com/duandalei/Word-video" target="_blank" rel="noreferrer">查看项目源码</a>
+  </footer>
+</div>
+</body>
+</html>
