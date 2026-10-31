@@ -70,6 +70,7 @@ python -m http.server 8000
 - Web Speech API 提供英文朗读
 - Google Fonts 加载 Baloo 2 与 Nunito，断网时回退到系统字体
 - GitHub Pages 托管在线版本
+- 所有动画页面都包含 `<meta name="viewport" content="width=device-width, initial-scale=1">`。缺少这行时，手机浏览器会按约 980px 的桌面宽度渲染再整体缩小，页面看起来像横屏且字很小；电脑端不受影响
 - 通过 `.gitignore` 排除本地截图、临时测试页和本地 Claude 设置
 
 ## 发布
