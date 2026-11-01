@@ -689,13 +689,20 @@ body{
     return "audio/" + slug + ".mp3";
   }
 
-  // 预先取回本课全部音频，点击词卡时直接从浏览器缓存播放，不再等待网络
-  var audioCache = LESSONS.map(function(L){
-    var a = new Audio();
-    a.preload = "auto";
-    a.src = audioUrl(L.word);
-    return a;
-  });
+  // 用 fetch 预取本课全部音频并存成 Blob，点击时直接播放本地数据，不再等待网络
+  // （iOS Safari 会忽略 Audio 的 preload，fetch 不受自动播放策略限制）
+  var blobUrls = {};
+  if(window.fetch){
+    LESSONS.forEach(function(L){
+      var url = audioUrl(L.word);
+      fetch(url).then(function(r){
+        if(!r.ok) throw new Error("HTTP " + r.status);
+        return r.blob();
+      }).then(function(b){
+        blobUrls[url] = URL.createObjectURL(new Blob([b], { type: "audio/mpeg" }));
+      }).catch(function(){});
+    });
+  }
 
   function cancelSpeech(){
     try{ audio.pause(); }catch(e){}
@@ -732,7 +739,8 @@ body{
 
     playAnim(L);
 
-    audio.src = audioUrl(L.word);
+    var url = audioUrl(L.word);
+    audio.src = blobUrls[url] || url;
     audio.playbackRate = slow ? 0.72 : 1;
     audio.onended = function(){ if(wordActive) finishWord(); };
     audio.onerror = function(){ if(wordActive) finishWord(); };
@@ -815,7 +823,7 @@ body{
 
     playAnim(L);
 
-    if(autoplay) setTimeout(function(){ if(!wordActive) readWord(); }, 380);
+    if(autoplay) setTimeout(function(){ if(!wordActive) readWord(); }, 150);
   }
 
   function hexA(hex, a){
