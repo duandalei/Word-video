@@ -63,3 +63,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+
+## 5. 项目约定
+
+- 朗读音频的预取与播放、字体托管等网络优化见 README「网络优化约定」：用 `fetch` + Blob 预取（iOS 会忽略 Audio 的 `preload`），切换单词后同步调用 `readWord()`，不要加 `setTimeout` 延时；字体使用 `fonts/` 本地文件，不要引入 Google Fonts。新增页面时复制现有页面的 speech 代码段和字体声明。

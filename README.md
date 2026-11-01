@@ -68,11 +68,24 @@ python -m http.server 8000
 
 - 原生 HTML、CSS、JavaScript，无框架、无构建步骤
 - 每个单词的英文朗读是预生成的 mp3（微软 Jenny 语音），用 `<audio>` 播放，不依赖浏览器的语音合成；慢速模式用 `playbackRate` 实现，音调自动保持
-- 页面打开后会预取本课全部 mp3 到浏览器缓存，点击词卡时立即出声，不再每次等待网络
-- 字体 Baloo 2 与 Nunito 托管在 `fonts/`，不依赖 Google Fonts（国内经常连不上）；加载失败时回退到系统字体
 - GitHub Pages 托管在线版本
 - 所有动画页面都包含 `<meta name="viewport" content="width=device-width, initial-scale=1">`。缺少这行时，手机浏览器会按约 980px 的桌面宽度渲染再整体缩小，页面看起来像横屏且字很小；电脑端不受影响
 - 通过 `.gitignore` 排除本地截图、临时测试页和本地 Claude 设置
+
+## 网络优化约定
+
+国内访问 GitHub Pages 较慢，以下设计是为了减少等待，**修改时请保留**：
+
+1. **音频预取用 `fetch` + Blob**
+   页面打开后用 `fetch` 取回本课全部 mp3，转成 Blob URL，点击时直接播放本地数据。
+   不要改回 `new Audio().preload = "auto"`：iOS Safari 会忽略媒体元素的 preload（低电量模式尤甚），手机端每次点词都要现场下载。
+2. **切换单词后同步朗读，不加延时**
+   切换后直接调用 `readWord()`，声音在点击手势内开始，iOS 播放更稳，用户点完即响。
+   不要加 `setTimeout`：之前有 380ms 的延时，切换会明显变慢。
+3. **字体本地托管**
+   Baloo 2 与 Nunito 托管在 `fonts/`，不依赖 Google Fonts（国内经常连不上）；加载失败时回退到系统字体（`system-ui` / `PingFang SC` / `Microsoft YaHei`）。
+
+新增课程页面时，复制现有页面的 speech 代码段和字体声明，不要重写。
 
 ## 发布
 
