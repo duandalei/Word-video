@@ -41,6 +41,7 @@
 .
 ├── index.html            # 故事书架首页
 ├── audio/                # 87 个单词的 mp3 朗读音频
+├── fonts/                # 本地字体 Baloo 2 与 Nunito（woff2）
 ├── l6-row-your-boat.html         # L6 Row your boat
 ├── l3-rain-rain-go-away.html     # L3 rain rain go away
 ├── l5-go-away-mosquito.html      # L5 Go away mosquito
@@ -67,7 +68,8 @@ python -m http.server 8000
 
 - 原生 HTML、CSS、JavaScript，无框架、无构建步骤
 - 每个单词的英文朗读是预生成的 mp3（微软 Jenny 语音），用 `<audio>` 播放，不依赖浏览器的语音合成；慢速模式用 `playbackRate` 实现，音调自动保持
-- Google Fonts 加载 Baloo 2 与 Nunito，断网时回退到系统字体
+- 页面打开后会预取本课全部 mp3 到浏览器缓存，点击词卡时立即出声，不再每次等待网络
+- 字体 Baloo 2 与 Nunito 托管在 `fonts/`，不依赖 Google Fonts（国内经常连不上）；加载失败时回退到系统字体
 - GitHub Pages 托管在线版本
 - 所有动画页面都包含 `<meta name="viewport" content="width=device-width, initial-scale=1">`。缺少这行时，手机浏览器会按约 980px 的桌面宽度渲染再整体缩小，页面看起来像横屏且字很小；电脑端不受影响
 - 通过 `.gitignore` 排除本地截图、临时测试页和本地 Claude 设置
