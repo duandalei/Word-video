@@ -100,6 +100,36 @@ body{
   padding-bottom:4px;
   white-space:nowrap;
 }
+.audio-status{
+  margin-right:auto;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.5px;
+  font-variant-numeric:tabular-nums;
+  color:var(--ink-soft);
+  padding:3px 10px 3px 9px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--surface);
+  opacity:0;
+  transform:translateY(-2px);
+  transition:opacity .2s ease, transform .2s ease;
+  pointer-events:none;
+}
+.audio-status.on{opacity:1;transform:none}
+.audio-status.done{opacity:0;transform:translateY(-4px)}
+.audio-status i{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--accent);
+  animation:audioPulse 1s ease-in-out infinite;
+}
+@keyframes audioPulse{
+  0%,100%{opacity:.35;transform:scale(.8)}
+  50%{opacity:1;transform:scale(1.15)}
+}
 
 /* ── Word rail ──────────────────────────────────────── */
 .chips{display:flex;flex-wrap:wrap;gap:8px}
@@ -379,6 +409,7 @@ body{
 
 <div class="app">
   <div class="head">
+    <div class="audio-status" id="audioStatus" aria-hidden="true"><i></i><span id="audioCount"></span></div>
     <div class="prog" id="prog">1 / 11</div>
   </div>
 
@@ -452,7 +483,30 @@ body{
   // 用 fetch 预取本课全部音频并存成 Blob，点击时直接播放本地数据，不再等待网络
   // （iOS Safari 会忽略 Audio 的 preload，fetch 不受自动播放策略限制）
   var blobUrls = {};
+  var elAudioStatus = $("audioStatus"), elAudioCount = $("audioCount");
+  var audioTotal = LESSONS.length, audioLoaded = 0, audioStatusTimer = null;
+
+  function audioDone(){
+    clearTimeout(audioStatusTimer);
+    if(elAudioStatus.classList.contains("on")){
+      elAudioStatus.classList.add("done");
+      setTimeout(function(){ elAudioStatus.classList.remove("on", "done"); }, 400);
+    }
+  }
+
+  function audioProgress(){
+    audioLoaded++;
+    elAudioCount.textContent = audioLoaded + "/" + audioTotal;
+    if(audioLoaded === audioTotal) audioDone();
+  }
+
+  elAudioCount.textContent = "0/" + audioTotal;
+
   if(window.fetch){
+    // 预取超过 150ms 才显示进度，避免缓存命中时闪一下
+    audioStatusTimer = setTimeout(function(){
+      if(audioLoaded < audioTotal) elAudioStatus.classList.add("on");
+    }, 150);
     LESSONS.forEach(function(L){
       var url = audioUrl(L.word);
       fetch(url).then(function(r){
@@ -460,7 +514,7 @@ body{
         return r.blob();
       }).then(function(b){
         blobUrls[url] = URL.createObjectURL(new Blob([b], { type: "audio/mpeg" }));
-      }).catch(function(){});
+      }).catch(function(){}).then(audioProgress);
     });
   }
 
