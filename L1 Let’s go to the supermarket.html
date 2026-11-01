@@ -395,56 +395,23 @@ body{
       elPlay = $("play"), elCoach = $("coach");
 
   var idx = 0, slow = false, autoAll = false;
-  var curUtt = null, coached = false;
+  var coached = false;
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ── speech ─────────────────────────────────────── */
-  var hasSpeech = ("speechSynthesis" in window) && ("SpeechSynthesisUtterance" in window);
-  var voices = [];
+  var audio = new Audio();
+  audio.preload = "auto";
 
-  function loadVoices(){
-    if(!hasSpeech) return;
-    voices = window.speechSynthesis.getVoices() || [];
-  }
-  loadVoices();
-  if(hasSpeech && window.speechSynthesis.onvoiceschanged !== undefined){
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-  }
-
-  var PREFERRED = ["Google US English","Samantha","Karen","Microsoft Aria Online (Natural) - English (United States)",
-                   "Microsoft Aria","Microsoft Jenny","Microsoft Zira","Microsoft Michelle","Daniel","Alex"];
-
-  function pickVoice(){
-    if(!voices.length) loadVoices();
-    if(!voices.length) return null;
-    var en = voices.filter(function(v){ return /^en(-|_|$)/i.test(v.lang || ""); });
-    if(!en.length) en = voices;
-    for(var i=0;i<PREFERRED.length;i++){
-      for(var j=0;j<en.length;j++){
-        if((en[j].name || "").indexOf(PREFERRED[i]) === 0) return en[j];
-      }
-    }
-    for(var k=0;k<en.length;k++){ if(/^en[-_]US/i.test(en[k].lang || "")) return en[k]; }
-    return en[0];
-  }
-
-  function rate(){ return slow ? 0.62 : 0.86; }
-
-  function utter(text, r){
-    var u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-US";
-    u.rate = r;
-    u.pitch = 1.05;
-    u.volume = 1;
-    var v = pickVoice();
-    if(v) u.voice = v;
-    return u;
+  function audioUrl(word){
+    var slug = word.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    return "audio/" + slug + ".mp3";
   }
 
   function cancelSpeech(){
-    if(!hasSpeech) return;
-    try{ window.speechSynthesis.cancel(); }catch(e){}
-    curUtt = null;
+    try{ audio.pause(); }catch(e){}
+    audio.onended = null;
+    audio.onerror = null;
+    try{ audio.currentTime = 0; }catch(e){}
   }
 
   /* ── reading ────────────────────────────────────── */
@@ -475,22 +442,17 @@ body{
 
     playAnim(L);
 
-    if(!hasSpeech){ finishWord(); return; }
-
-    var u = utter(L.word, rate());
-    var gotStart = false;
-    u.onstart = function(){ gotStart = true; };
-    u.onend = function(){ if(wordActive) finishWord(); };
-    u.onerror = function(){ if(wordActive) finishWord(); };
-    curUtt = u;
-
-    try{ window.speechSynthesis.cancel(); }catch(e){}
-    window.speechSynthesis.speak(u);
-
-    /* 合成器不发声时（无可用语音）也继续往下走 */
-    setTimeout(function(){
-      if(wordActive && !gotStart){ cancelSpeech(); finishWord(); }
-    }, 1600);
+    audio.src = audioUrl(L.word);
+    audio.playbackRate = slow ? 0.72 : 1;
+    audio.onended = function(){ if(wordActive) finishWord(); };
+    audio.onerror = function(){ if(wordActive) finishWord(); };
+    var p = audio.play();
+    if(p && p.catch){
+      p.catch(function(err){
+        if(err && err.name === "AbortError") return;
+        if(wordActive) finishWord();
+      });
+    }
   }
 
   /* ── animation ──────────────────────────────────── */

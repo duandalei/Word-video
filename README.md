@@ -33,13 +33,14 @@
 4. 使用 `←` / `→` 切换单词，空格键重新朗读。
 5. 需要慢慢听时打开“🐢 慢速”，需要连续听时打开“🔁 全部连读”。
 
-朗读使用浏览器自带的 Web Speech API，建议使用 Chrome 或 Edge，并确保系统安装了英文语音。
+朗读使用预先生成的 mp3 音频（`audio/` 目录），不依赖浏览器的语音合成能力，微信、百度等内置浏览器也能正常播放。
 
 ## 项目结构
 
 ```text
 .
 ├── index.html            # 故事书架首页
+├── audio/                # 87 个单词的 mp3 朗读音频
 ├── l6-row-your-boat.html         # L6 Row your boat
 ├── l3-rain-rain-go-away.html     # L3 rain rain go away
 ├── l5-go-away-mosquito.html      # L5 Go away mosquito
@@ -65,7 +66,7 @@ python -m http.server 8000
 ## 技术说明
 
 - 原生 HTML、CSS、JavaScript，无框架、无构建步骤
-- Web Speech API 提供英文朗读
+- 每个单词的英文朗读是预生成的 mp3（微软 Jenny 语音），用 `<audio>` 播放，不依赖浏览器的语音合成；慢速模式用 `playbackRate` 实现，音调自动保持
 - Google Fonts 加载 Baloo 2 与 Nunito，断网时回退到系统字体
 - GitHub Pages 托管在线版本
 - 所有动画页面都包含 `<meta name="viewport" content="width=device-width, initial-scale=1">`。缺少这行时，手机浏览器会按约 980px 的桌面宽度渲染再整体缩小，页面看起来像横屏且字很小；电脑端不受影响
