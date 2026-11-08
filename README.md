@@ -8,7 +8,7 @@
 
 每个单词都是一张互动卡片：点击词卡、点击画面，或按 ▶，页面会用浏览器英文语音朗读单词，同时播放与词义对应的动画。适合孩子、英语初学者或课堂演示使用。
 
-- 6 个主题故事，共 87 个单词
+- 8 个主题故事，共 129 个单词
 - 每个词都有动画、IPA 音标和中文释义
 - 支持慢速朗读、全部连读、键盘切换
 - 适配手机和桌面，支持深色模式与减少动态效果
@@ -18,6 +18,8 @@
 
 | 故事 | 中文 | 单词数 | 在线打开 |
 | --- | --- | ---: | --- |
+| L7 Five little ducks | 五只小鸭子 | 20 | [打开](https://duandalei.github.io/Word-video/l7-five-little-ducks.html) |
+| L8 I'm a little farmer | 小农夫的一天 | 22 | [打开](https://duandalei.github.io/Word-video/l8-im-a-little-farmer.html) |
 | L6 Row your boat | 丛林小河 | 17 | [打开](https://duandalei.github.io/Word-video/l6-row-your-boat.html) |
 | L3 rain rain go away | 晴天雨天 | 17 | [打开](https://duandalei.github.io/Word-video/l3-rain-rain-go-away.html) |
 | L5 Go away mosquito | 蚊子包 | 16 | [打开](https://duandalei.github.io/Word-video/l5-go-away-mosquito.html) |
@@ -40,8 +42,10 @@
 ```text
 .
 ├── index.html            # 故事书架首页
-├── audio/                # 87 个单词的 mp3 朗读音频
+├── audio/                # 129 个单词的 mp3 朗读音频
 ├── fonts/                # 本地字体 Baloo 2 与 Nunito（woff2）
+├── l7-five-little-ducks.html     # L7 Five little ducks
+├── l8-im-a-little-farmer.html    # L8 I'm a little farmer
 ├── l6-row-your-boat.html         # L6 Row your boat
 ├── l3-rain-rain-go-away.html     # L3 rain rain go away
 ├── l5-go-away-mosquito.html      # L5 Go away mosquito

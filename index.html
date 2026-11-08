@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Word Video · 单词动画</title>
-<meta name="description" content="6 个互动英语单词动画故事，共 87 个单词，带发音、音标和中文释义。">
+<meta name="description" content="8 个互动英语单词动画故事，共 129 个单词，带发音、音标和中文释义。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚣%3C/text%3E%3C/svg%3E">
 <style>
 /* 本地字体：不再依赖 Google Fonts（国内经常连不上） */
@@ -17,7 +17,7 @@
 @font-face{font-family:'Nunito';font-style:normal;font-weight:900;font-display:swap;src:url(fonts/nunito-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Nunito';font-style:normal;font-weight:900;font-display:swap;src:url(fonts/nunito-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 /* ── Design plan ────────────────────────────────────────────────
-   Subject: a shelf of seven animated picture-book lessons. The
+   Subject: a shelf of eight animated picture-book lessons. The
             landing page's job is to let a learner pick a story and
             start, so the covers carry the titles, the word counts
             and a one-line scene hint.
@@ -447,6 +447,8 @@ button,a{-webkit-tap-highlight-color:transparent}
 
 /* cover palettes */
 .cover-jungle{--cover:#1F6B5C;--edge:#144A3F;--cover-ink:#FFF8E8}
+.cover-pond{--cover:#2B7A78;--edge:#1B5654;--cover-ink:#F4FBFF}
+.cover-farm{--cover:#A85C2A;--edge:#743A15;--cover-ink:#FFF8E8}
 .cover-rain{--cover:#2E7FA8;--edge:#1B5675;--cover-ink:#F4FBFF}
 .cover-body{--cover:#697B3D;--edge:#465523;--cover-ink:#FCFAE9}
 .cover-kitty{--cover:#B94D6A;--edge:#87364C;--cover-ink:#FFF3F0}
@@ -501,7 +503,7 @@ button,a{-webkit-tap-highlight-color:transparent}
       <div>
         <h1>挑一个故事，<br>让单词<span class="highlight">动起来</span>。</h1>
         <p class="lede">
-          <strong>6 个互动单词动画，87 个英文单词。</strong>
+          <strong>8 个互动单词动画，129 个英文单词。</strong>
           每个词都有专属动画、音标、中文释义，点一下还能听发音。
         </p>
         <a class="hero-cta" href="#shelf">去书架看看</a>
@@ -524,10 +526,36 @@ button,a{-webkit-tap-highlight-color:transparent}
     <section class="shelf-section" id="shelf" aria-labelledby="shelf-title">
       <div class="shelf-head">
         <h2 id="shelf-title">故事书架</h2>
-        <p>6 个故事，87 个单词。点击画面或 ▶ 听发音。</p>
+        <p>8 个故事，129 个单词。点击画面或 ▶ 听发音。</p>
       </div>
 
       <div class="books">
+        <a class="book cover-pond" href="l7-five-little-ducks.html" aria-label="打开 L7 Five little ducks，五只小鸭子">
+          <span class="book-top">
+            <span class="book-emoji" aria-hidden="true">🐥</span>
+            <span class="book-count">20 words</span>
+          </span>
+          <span class="book-info">
+            <span class="book-title">L7 Five little ducks</span>
+            <span class="book-cn">五只小鸭子</span>
+            <span class="book-desc">跟着小鸭子走过山丘，回到池塘。</span>
+            <span class="book-open">翻开这本</span>
+          </span>
+        </a>
+
+        <a class="book cover-farm" href="l8-im-a-little-farmer.html" aria-label="打开 L8 I'm a little farmer，小农夫的一天">
+          <span class="book-top">
+            <span class="book-emoji" aria-hidden="true">🚜</span>
+            <span class="book-count">22 words</span>
+          </span>
+          <span class="book-info">
+            <span class="book-title">L8 I'm a little farmer</span>
+            <span class="book-cn">小农夫的一天</span>
+            <span class="book-desc">喂动物、挤牛奶、摘蔬菜，忙一天。</span>
+            <span class="book-open">翻开这本</span>
+          </span>
+        </a>
+
         <a class="book cover-jungle" href="l6-row-your-boat.html" aria-label="打开 L6 Row your boat，丛林小河">
           <span class="book-top">
             <span class="book-emoji" aria-hidden="true">🚣</span>
