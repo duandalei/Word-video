@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Word Video · 单词动画</title>
-<meta name="description" content="8 个互动英语单词动画故事，共 129 个单词，带发音、音标和中文释义。">
+<meta name="description" content="10 个互动英语单词动画故事，共 163 个单词，带发音、音标和中文释义。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚣%3C/text%3E%3C/svg%3E">
 <style>
 /* 本地字体：不再依赖 Google Fonts（国内经常连不上） */
@@ -454,6 +454,8 @@ button,a{-webkit-tap-highlight-color:transparent}
 .cover-kitty{--cover:#B94D6A;--edge:#87364C;--cover-ink:#FFF3F0}
 .cover-tree{--cover:#4F7C3A;--edge:#365827;--cover-ink:#FFF9E9}
 .cover-zoo{--cover:#B96F1D;--edge:#81490D;--cover-ink:#FFF8E8}
+.cover-smile{--cover:#C25E4A;--edge:#8C3A2B;--cover-ink:#FFF4EC}
+.cover-puppy{--cover:#6E5FA0;--edge:#493D74;--cover-ink:#F6F3FF}
 
 @media (max-width:980px){
   .hero{grid-template-columns:1fr;gap:34px}
@@ -503,7 +505,7 @@ button,a{-webkit-tap-highlight-color:transparent}
       <div>
         <h1>挑一个故事，<br>让单词<span class="highlight">动起来</span>。</h1>
         <p class="lede">
-          <strong>8 个互动单词动画，129 个英文单词。</strong>
+          <strong>10 个互动单词动画，163 个英文单词。</strong>
           每个词都有专属动画、音标、中文释义，点一下还能听发音。
         </p>
         <a class="hero-cta" href="#shelf">去书架看看</a>
@@ -526,10 +528,36 @@ button,a{-webkit-tap-highlight-color:transparent}
     <section class="shelf-section" id="shelf" aria-labelledby="shelf-title">
       <div class="shelf-head">
         <h2 id="shelf-title">故事书架</h2>
-        <p>8 个故事，129 个单词。点击画面或 ▶ 听发音。</p>
+        <p>10 个故事，163 个单词。点击画面或 ▶ 听发音。</p>
       </div>
 
       <div class="books">
+        <a class="book cover-smile" href="l9-you-make-me-smile.html" aria-label="打开 L9 You make me smile，你让我微笑">
+          <span class="book-top">
+            <span class="book-emoji" aria-hidden="true">😊</span>
+            <span class="book-count">22 words</span>
+          </span>
+          <span class="book-info">
+            <span class="book-title">L9 You make me smile</span>
+            <span class="book-cn">你让我微笑</span>
+            <span class="book-desc">夸奖、勇敢和善意，都是闪光的时刻。</span>
+            <span class="book-open">翻开这本</span>
+          </span>
+        </a>
+
+        <a class="book cover-puppy" href="l10-my-best-friend.html" aria-label="打开 L10 My best friend，我的小狗朋友">
+          <span class="book-top">
+            <span class="book-emoji" aria-hidden="true">🐶</span>
+            <span class="book-count">12 words</span>
+          </span>
+          <span class="book-info">
+            <span class="book-title">L10 My best friend</span>
+            <span class="book-cn">我的小狗朋友</span>
+            <span class="book-desc">和小狗做朋友，把回忆留在照片里。</span>
+            <span class="book-open">翻开这本</span>
+          </span>
+        </a>
+
         <a class="book cover-pond" href="l7-five-little-ducks.html" aria-label="打开 L7 Five little ducks，五只小鸭子">
           <span class="book-top">
             <span class="book-emoji" aria-hidden="true">🐥</span>
