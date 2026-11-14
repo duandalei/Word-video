@@ -627,12 +627,14 @@ body{
   }
 
   /* ── speech ─────────────────────────────────────── */
-  // 每个单词在预取时就建好自己的 Audio 元素，src 只设置这一次。
-  // iOS 上每次给同一个 Audio 重新赋 src 会重建媒体管线，点击时会在主线程上卡一下。
-  var players = {};            // url -> 预建好的 Audio
-  var fallback = new Audio();  // 音频还没预取完时用的后备元素
-  fallback.preload = "auto";
-  var current = null;          // 当前正在播放的 Audio
+  // iOS 上 HTMLAudioElement 的 play() 会同步阻塞主线程（实测约 700ms），
+  // 改用 Web Audio：预先把音频解码成 AudioBuffer，点击时只启动 BufferSource。
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+  var ctx = AudioCtx ? new AudioCtx() : null;
+  // iOS 16.4+：把 Web Audio 归到 media 通道，静音键打开时也能出声
+  if(navigator.audioSession) navigator.audioSession.type = "playback";
+  var buffers = {};    // url -> AudioBuffer
+  var current = null;  // 当前正在播放的 BufferSource
 
   function audioUrl(word){
     var slug = word.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
@@ -669,21 +671,19 @@ body{
       var url = audioUrl(L.word);
       fetch(url).then(function(r){
         if(!r.ok) throw new Error("HTTP " + r.status);
-        return r.blob();
-      }).then(function(b){
-        var a = new Audio(URL.createObjectURL(new Blob([b], { type: "audio/mpeg" })));
-        a.preload = "auto";
-        players[url] = a;
+        return r.arrayBuffer();
+      }).then(function(buf){
+        if(!ctx) throw new Error("no Web Audio");
+        return ctx.decodeAudioData(buf).then(function(ab){ buffers[url] = ab; });
       }).catch(function(){}).then(audioProgress);
     });
   }
 
   function cancelSpeech(){
     if(!current) return;
-    try{ current.pause(); }catch(e){}
-    current.onended = null;
-    current.onerror = null;
-    try{ current.currentTime = 0; }catch(e){}
+    try{ current.onended = null; }catch(e){}
+    try{ current.stop(); }catch(e){}
+    try{ current.disconnect(); }catch(e){}
     current = null;
   }
 
@@ -719,25 +719,21 @@ body{
 
     if(!NO_AUDIO){
       var url = audioUrl(L.word);
-      var player = players[url];
-      if(!player){
-        // 音频还没预取完：退回单一元素 + 网络地址
-        player = fallback;
-        player.src = url;
-      }
-      current = player;
-      player.playbackRate = slow ? 0.72 : 1;
-      player.onended = function(){ if(wordActive) finishWord(); };
-      player.onerror = function(){ if(wordActive) finishWord(); };
-      var t2 = performance.now();
-      var p = player.play();
-      var t3 = performance.now();
-      perf("stop " + (t1-t0).toFixed(1) + " | setup " + (t2-t1).toFixed(1) + " | play " + (t3-t2).toFixed(1));
-      if(p && p.catch){
-        p.catch(function(err){
-          if(err && err.name === "AbortError") return;
-          if(wordActive) finishWord();
-        });
+      var buf = buffers[url];
+      if(buf && ctx){
+        if(ctx.state === "suspended") ctx.resume();
+        var src = ctx.createBufferSource();
+        src.buffer = buf;
+        src.playbackRate.value = slow ? 0.72 : 1;
+        src.connect(ctx.destination);
+        src.onended = function(){ if(wordActive) finishWord(); };
+        current = src;
+        var t2 = performance.now();
+        src.start();
+        var t3 = performance.now();
+        perf("stop " + (t1-t0).toFixed(1) + " | setup " + (t2-t1).toFixed(1) + " | start " + (t3-t2).toFixed(1));
+      } else {
+        perf("buffer missing");
       }
     } else {
       perf("noaudio");
