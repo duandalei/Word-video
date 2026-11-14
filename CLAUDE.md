@@ -66,4 +66,4 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ## 5. 项目约定
 
-- 朗读音频的预取与播放、字体托管等网络优化见 README「网络优化约定」：用 `fetch` + Blob 预取（iOS 会忽略 Audio 的 `preload`），切换单词后同步调用 `readWord()`，不要加 `setTimeout` 延时；字体使用 `fonts/` 本地文件，不要引入 Google Fonts。新增页面时复制现有页面的 speech 代码段和字体声明。
+- 朗读音频的预取与播放、字体托管等网络优化见 README「网络优化约定」：用 `fetch` 预取并解码成 `AudioBuffer`、用 Web Audio 播放（iOS 上 `HTMLAudioElement.play()` 会阻塞主线程约 0.7 秒），切换单词后同步调用 `readWord()`，不要加 `setTimeout` 延时；字体使用 `fonts/` 本地文件，不要引入 Google Fonts。新增页面时复制现有页面的 speech 代码段和字体声明。

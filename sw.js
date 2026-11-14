@@ -10,7 +10,7 @@
    旧版本缓存在新版本激活时自动删除。
 */
 
-const VERSION = "v2";
+const VERSION = "v4";
 const CACHE_NAME = "word-video-" + VERSION;
 
 // 11 个页面

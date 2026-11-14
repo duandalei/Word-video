@@ -436,7 +436,6 @@ body{
     <button class="btn primary" id="play"><span>▶</span>读单词</button>
     <button class="btn icon" id="prev" aria-label="上一个">←</button>
     <button class="btn icon" id="next" aria-label="下一个">→</button>
-    <button class="btn" id="slow" aria-pressed="false">🐢 慢速</button>
     <button class="btn" id="all" aria-pressed="false">🔁 全部连读</button>
   </div>
 
@@ -467,22 +466,27 @@ body{
       elWord = $("mWord"), elIpa = $("mIpa"), elCn = $("mCn"), elProg = $("prog"),
       elPlay = $("play"), elCoach = $("coach");
 
-  var idx = 0, slow = false, autoAll = false;
+  var idx = 0, autoAll = false;
   var coached = false;
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ── speech ─────────────────────────────────────── */
-  var audio = new Audio();
-  audio.preload = "auto";
+  // iOS 上 HTMLAudioElement 的 play() 会同步阻塞主线程（实测约 700ms），
+  // 改用 Web Audio：预先把音频解码成 AudioBuffer，点击时只启动 BufferSource。
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+  var ctx = AudioCtx ? new AudioCtx() : null;
+  // iOS 16.4+：把 Web Audio 归到 media 通道，静音键打开时也能出声
+  if(navigator.audioSession) navigator.audioSession.type = "playback";
+  var buffers = {};    // url -> AudioBuffer
+  var current = null;  // 当前正在播放的 BufferSource
 
   function audioUrl(word){
     var slug = word.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
     return "audio/" + slug + ".mp3";
   }
 
-  // 用 fetch 预取本课全部音频并存成 Blob，点击时直接播放本地数据，不再等待网络
-  // （iOS Safari 会忽略 Audio 的 preload，fetch 不受自动播放策略限制）
-  var blobUrls = {};
+  // 用 fetch 预取本课全部音频并解码成 AudioBuffer，点击时直接启动播放，不再等待网络
+  // （iOS Safari 会忽略 Audio 的 preload；HTMLAudioElement.play() 还会阻塞主线程约 0.7s）
   var elAudioStatus = $("audioStatus"), elAudioCount = $("audioCount");
   var audioTotal = LESSONS.length, audioLoaded = 0, audioStatusTimer = null;
 
@@ -511,18 +515,20 @@ body{
       var url = audioUrl(L.word);
       fetch(url).then(function(r){
         if(!r.ok) throw new Error("HTTP " + r.status);
-        return r.blob();
-      }).then(function(b){
-        blobUrls[url] = URL.createObjectURL(new Blob([b], { type: "audio/mpeg" }));
+        return r.arrayBuffer();
+      }).then(function(buf){
+        if(!ctx) throw new Error("no Web Audio");
+        return ctx.decodeAudioData(buf).then(function(ab){ buffers[url] = ab; });
       }).catch(function(){}).then(audioProgress);
     });
   }
 
   function cancelSpeech(){
-    try{ audio.pause(); }catch(e){}
-    audio.onended = null;
-    audio.onerror = null;
-    try{ audio.currentTime = 0; }catch(e){}
+    if(!current) return;
+    try{ current.onended = null; }catch(e){}
+    try{ current.stop(); }catch(e){}
+    try{ current.disconnect(); }catch(e){}
+    current = null;
   }
 
   /* ── reading ────────────────────────────────────── */
@@ -553,17 +559,15 @@ body{
 
     playAnim(L);
 
-    var url = audioUrl(L.word);
-    audio.src = blobUrls[url] || url;
-    audio.playbackRate = slow ? 0.72 : 1;
-    audio.onended = function(){ if(wordActive) finishWord(); };
-    audio.onerror = function(){ if(wordActive) finishWord(); };
-    var p = audio.play();
-    if(p && p.catch){
-      p.catch(function(err){
-        if(err && err.name === "AbortError") return;
-        if(wordActive) finishWord();
-      });
+    var buf = buffers[audioUrl(L.word)];
+    if(buf && ctx){
+      if(ctx.state === "suspended") ctx.resume();
+      var src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.onended = function(){ if(wordActive) finishWord(); };
+      current = src;
+      src.start();
     }
   }
 
@@ -658,10 +662,6 @@ body{
     elCoach.classList.add("gone");
   }
 
-  function setSlow(v){
-    slow = v;
-    $("slow").setAttribute("aria-pressed", v ? "true" : "false");
-  }
   function setAuto(v){
     autoAll = v;
     $("all").setAttribute("aria-pressed", v ? "true" : "false");
@@ -677,7 +677,6 @@ body{
   });
   $("prev").addEventListener("click", function(){ dismissCoach(); show(idx - 1, true); });
   $("next").addEventListener("click", function(){ dismissCoach(); show(idx + 1, true); });
-  $("slow").addEventListener("click", function(){ dismissCoach(); setSlow(!slow); });
   $("all").addEventListener("click", function(){
     dismissCoach();
     var v = !autoAll;

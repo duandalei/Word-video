@@ -10,7 +10,7 @@
 
 - 10 个主题故事，共 163 个单词
 - 每个词都有动画、IPA 音标和中文释义
-- 支持慢速朗读、全部连读、键盘切换
+- 支持全部连读、键盘切换
 - 适配手机和桌面，支持深色模式与减少动态效果
 - 纯 HTML / CSS / JavaScript，无需安装依赖
 
@@ -35,7 +35,7 @@
 2. 从“故事书架”选择一个故事。
 3. 点击任意词卡切换单词，点击画面或 ▶ 听发音。
 4. 使用 `←` / `→` 切换单词，空格键重新朗读。
-5. 需要慢慢听时打开“🐢 慢速”，需要连续听时打开“🔁 全部连读”。
+5. 需要连续听时打开“🔁 全部连读”。
 
 朗读使用预先生成的 mp3 音频（`audio/` 目录），不依赖浏览器的语音合成能力，微信、百度等内置浏览器也能正常播放。
 
@@ -79,7 +79,7 @@ python -m http.server 8000
 ## 技术说明
 
 - 原生 HTML、CSS、JavaScript，无框架、无构建步骤
-- 每个单词的英文朗读是预生成的 mp3（微软 Jenny 语音），用 `<audio>` 播放，不依赖浏览器的语音合成；慢速模式用 `playbackRate` 实现，音调自动保持
+- 每个单词的英文朗读是预生成的 mp3（微软 Jenny 语音），预解码后用 Web Audio 播放，不依赖浏览器的语音合成
 - GitHub Pages 托管在线版本
 - 所有动画页面都包含 `<meta name="viewport" content="width=device-width, initial-scale=1">`。缺少这行时，手机浏览器会按约 980px 的桌面宽度渲染再整体缩小，页面看起来像横屏且字很小；电脑端不受影响
 - 通过 `.gitignore` 排除本地截图、临时测试页和本地 Claude 设置
@@ -88,9 +88,9 @@ python -m http.server 8000
 
 国内访问 GitHub Pages 较慢，以下设计是为了减少等待，**修改时请保留**：
 
-1. **音频预取用 `fetch` + Blob**
-   页面打开后用 `fetch` 取回本课全部 mp3，转成 Blob URL，点击时直接播放本地数据。
-   不要改回 `new Audio().preload = "auto"`：iOS Safari 会忽略媒体元素的 preload（低电量模式尤甚），手机端每次点词都要现场下载。
+1. **音频预取解码成 AudioBuffer，用 Web Audio 播放**
+   页面打开后用 `fetch` 取回本课全部 mp3，用 `decodeAudioData` 解码成 `AudioBuffer`；点击时新建 `AudioBufferSourceNode` 并 `start()`。
+   不要改回 `HTMLAudioElement`：iOS 上实测 `play()` 会同步阻塞主线程约 700ms（即使音频已经预取完），每次点词都会明显卡顿。也不要改回 `preload = "auto"`：iOS Safari 会忽略媒体元素的 preload（低电量模式尤甚）。
 2. **切换单词后同步朗读，不加延时**
    切换后直接调用 `readWord()`，声音在点击手势内开始，iOS 播放更稳，用户点完即响。
    不要加 `setTimeout`：之前有 380ms 的延时，切换会明显变慢。
