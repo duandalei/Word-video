@@ -79,7 +79,7 @@ python -m http.server 8000
 ## 技术说明
 
 - 原生 HTML、CSS、JavaScript，无框架、无构建步骤
-- 每个单词的英文朗读是预生成的 mp3（微软 Jenny 语音），预解码后用 Web Audio 播放，不依赖浏览器的语音合成
+- 每个单词的英文朗读是预生成的 mp3（微软 Jenny 语音），预解码后用 Web Audio 播放，不依赖浏览器的语音合成。Web Audio 遵循系统静音键：手机拨到静音档时不会发声
 - GitHub Pages 托管在线版本
 - 所有动画页面都包含 `<meta name="viewport" content="width=device-width, initial-scale=1">`。缺少这行时，手机浏览器会按约 980px 的桌面宽度渲染再整体缩小，页面看起来像横屏且字很小；电脑端不受影响
 - 通过 `.gitignore` 排除本地截图、临时测试页和本地 Claude 设置

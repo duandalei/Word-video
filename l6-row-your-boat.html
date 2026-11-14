@@ -613,8 +613,6 @@ body{
   // 改用 Web Audio：预先把音频解码成 AudioBuffer，点击时只启动 BufferSource。
   var AudioCtx = window.AudioContext || window.webkitAudioContext;
   var ctx = AudioCtx ? new AudioCtx() : null;
-  // iOS 16.4+：把 Web Audio 归到 media 通道，静音键打开时也能出声
-  if(navigator.audioSession) navigator.audioSession.type = "playback";
   var buffers = {};    // url -> AudioBuffer
   var current = null;  // 当前正在播放的 BufferSource
 
