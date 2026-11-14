@@ -44,6 +44,10 @@
 ```text
 .
 ├── index.html            # 故事书架首页
+├── manifest.json         # PWA 应用清单（名称、图标、独立窗口）
+├── sw.js                 # Service Worker：全站离线缓存
+├── sw-register.js        # 注册 Service Worker
+├── icons/                # PWA 图标（192 / 512 / maskable / apple-touch）
 ├── audio/                # 163 个单词的 mp3 朗读音频
 ├── fonts/                # 本地字体 Baloo 2 与 Nunito（woff2）
 ├── l9-you-make-me-smile.html     # L9 You make me smile
@@ -92,6 +96,10 @@ python -m http.server 8000
    不要加 `setTimeout`：之前有 380ms 的延时，切换会明显变慢。
 3. **字体本地托管**
    Baloo 2 与 Nunito 托管在 `fonts/`，不依赖 Google Fonts（国内经常连不上）；加载失败时回退到系统字体（`system-ui` / `PingFang SC` / `Microsoft YaHei`）。
+4. **Service Worker 离线缓存**
+   `sw.js` 首次访问时预缓存全部页面、字体、图标和 163 个音频（约 2.9MB），之后页面用 stale-while-revalidate、静态资源用 cache-first，断网也能打开。
+   发布新内容后，把新增文件加进 `sw.js` 的预缓存列表，并把 `VERSION` 加 1；旧缓存会在新版本激活时自动删除。
+   `file://` 下 Service Worker 不生效，测试离线请用本地服务器（见上一节）。
 
 新增课程页面时，复制现有页面的 speech 代码段和字体声明，不要重写。
 
