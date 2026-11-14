@@ -609,6 +609,12 @@ body{
   var coached = false, started = false;
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // 临时调试开关（定位 iOS 卡顿，定位完删除）：?noaudio=1 / ?nofx=1 / ?noanim=1
+  var qs = location.search;
+  var NO_AUDIO = /[?&]noaudio=1/.test(qs);
+  var NO_FX = /[?&]nofx=1/.test(qs);
+  var NO_ANIM = /[?&]noanim=1/.test(qs);
+
   /* ── speech ─────────────────────────────────────── */
   var audio = new Audio();
   audio.preload = "auto";
@@ -691,22 +697,25 @@ body{
 
     playAnim(L);
 
-    var url = audioUrl(L.word);
-    audio.src = blobUrls[url] || url;
-    audio.playbackRate = slow ? 0.72 : 1;
-    audio.onended = function(){ if(wordActive) finishWord(); };
-    audio.onerror = function(){ if(wordActive) finishWord(); };
-    var p = audio.play();
-    if(p && p.catch){
-      p.catch(function(err){
-        if(err && err.name === "AbortError") return;
-        if(wordActive) finishWord();
-      });
+    if(!NO_AUDIO){
+      var url = audioUrl(L.word);
+      audio.src = blobUrls[url] || url;
+      audio.playbackRate = slow ? 0.72 : 1;
+      audio.onended = function(){ if(wordActive) finishWord(); };
+      audio.onerror = function(){ if(wordActive) finishWord(); };
+      var p = audio.play();
+      if(p && p.catch){
+        p.catch(function(err){
+          if(err && err.name === "AbortError") return;
+          if(wordActive) finishWord();
+        });
+      }
     }
   }
 
   /* ── animation ──────────────────────────────────── */
   function playAnim(L){
+    if(NO_ANIM) return;
     elArt.className = "art";
     void elArt.offsetWidth;
     elArt.classList.add("anim-" + L.anim);
@@ -714,7 +723,7 @@ body{
   }
 
   function spawnFx(list){
-    if(reduced || !list || !list.length) return;
+    if(NO_FX || reduced || !list || !list.length) return;
     for(var i=0;i<7;i++){
       (function(i){
         setTimeout(function(){
