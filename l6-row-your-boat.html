@@ -616,8 +616,12 @@ body{
   var NO_ANIM = /[?&]noanim=1/.test(qs);
 
   /* ── speech ─────────────────────────────────────── */
-  var audio = new Audio();
-  audio.preload = "auto";
+  // 每个单词在预取时就建好自己的 Audio 元素，src 只设置这一次。
+  // iOS 上每次给同一个 Audio 重新赋 src 会重建媒体管线，点击时会在主线程上卡一下。
+  var players = {};            // url -> 预建好的 Audio
+  var fallback = new Audio();  // 音频还没预取完时用的后备元素
+  fallback.preload = "auto";
+  var current = null;          // 当前正在播放的 Audio
 
   function audioUrl(word){
     var slug = word.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
@@ -626,7 +630,6 @@ body{
 
   // 用 fetch 预取本课全部音频并存成 Blob，点击时直接播放本地数据，不再等待网络
   // （iOS Safari 会忽略 Audio 的 preload，fetch 不受自动播放策略限制）
-  var blobUrls = {};
   var elAudioStatus = $("audioStatus"), elAudioCount = $("audioCount");
   var audioTotal = LESSONS.length, audioLoaded = 0, audioStatusTimer = null;
 
@@ -657,16 +660,20 @@ body{
         if(!r.ok) throw new Error("HTTP " + r.status);
         return r.blob();
       }).then(function(b){
-        blobUrls[url] = URL.createObjectURL(new Blob([b], { type: "audio/mpeg" }));
+        var a = new Audio(URL.createObjectURL(new Blob([b], { type: "audio/mpeg" })));
+        a.preload = "auto";
+        players[url] = a;
       }).catch(function(){}).then(audioProgress);
     });
   }
 
   function cancelSpeech(){
-    try{ audio.pause(); }catch(e){}
-    audio.onended = null;
-    audio.onerror = null;
-    try{ audio.currentTime = 0; }catch(e){}
+    if(!current) return;
+    try{ current.pause(); }catch(e){}
+    current.onended = null;
+    current.onerror = null;
+    try{ current.currentTime = 0; }catch(e){}
+    current = null;
   }
 
   /* ── reading ────────────────────────────────────── */
@@ -699,11 +706,17 @@ body{
 
     if(!NO_AUDIO){
       var url = audioUrl(L.word);
-      audio.src = blobUrls[url] || url;
-      audio.playbackRate = slow ? 0.72 : 1;
-      audio.onended = function(){ if(wordActive) finishWord(); };
-      audio.onerror = function(){ if(wordActive) finishWord(); };
-      var p = audio.play();
+      var player = players[url];
+      if(!player){
+        // 音频还没预取完：退回单一元素 + 网络地址
+        player = fallback;
+        player.src = url;
+      }
+      current = player;
+      player.playbackRate = slow ? 0.72 : 1;
+      player.onended = function(){ if(wordActive) finishWord(); };
+      player.onerror = function(){ if(wordActive) finishWord(); };
+      var p = player.play();
       if(p && p.catch){
         p.catch(function(err){
           if(err && err.name === "AbortError") return;
