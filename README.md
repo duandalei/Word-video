@@ -18,13 +18,13 @@
 
 | 故事 | 中文 | 单词数 | 在线打开 |
 | --- | --- | ---: | --- |
-| L9 You make me smile | 你让我微笑 | 22 | [打开](https://duandalei.github.io/Word-video/l9-you-make-me-smile.html) |
 | L10 My best friend | 我的小狗朋友 | 12 | [打开](https://duandalei.github.io/Word-video/l10-my-best-friend.html) |
-| L7 Five little ducks | 五只小鸭子 | 20 | [打开](https://duandalei.github.io/Word-video/l7-five-little-ducks.html) |
+| L9 You make me smile | 你让我微笑 | 22 | [打开](https://duandalei.github.io/Word-video/l9-you-make-me-smile.html) |
 | L8 I'm a little farmer | 小农夫的一天 | 22 | [打开](https://duandalei.github.io/Word-video/l8-im-a-little-farmer.html) |
+| L7 Five little ducks | 五只小鸭子 | 20 | [打开](https://duandalei.github.io/Word-video/l7-five-little-ducks.html) |
 | L6 Row your boat | 丛林小河 | 17 | [打开](https://duandalei.github.io/Word-video/l6-row-your-boat.html) |
-| L3 rain rain go away | 晴天雨天 | 17 | [打开](https://duandalei.github.io/Word-video/l3-rain-rain-go-away.html) |
 | L5 Go away mosquito | 蚊子包 | 16 | [打开](https://duandalei.github.io/Word-video/l5-go-away-mosquito.html) |
+| L3 rain rain go away | 晴天雨天 | 17 | [打开](https://duandalei.github.io/Word-video/l3-rain-rain-go-away.html) |
 | L2 I have a pet cat | 小猫的一天 | 13 | [打开](https://duandalei.github.io/Word-video/l2-i-have-a-pet-cat.html) |
 | L1 Let’s go to the supermarket | 从种子到大树 | 13 | [打开](https://duandalei.github.io/Word-video/L1%20Let%E2%80%99s%20go%20to%20the%20supermarket.html) |
 | A Day at the Zoo | 动物园的一天 | 11 | [打开](https://duandalei.github.io/Word-video/zoo.html) |
