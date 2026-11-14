@@ -614,6 +614,17 @@ body{
   var NO_AUDIO = /[?&]noaudio=1/.test(qs);
   var NO_FX = /[?&]nofx=1/.test(qs);
   var NO_ANIM = /[?&]noanim=1/.test(qs);
+  var PERF = /[?&]perf=1/.test(qs);
+  var perfEl = null;
+  function perf(msg){
+    if(!PERF) return;
+    if(!perfEl){
+      perfEl = document.createElement("div");
+      perfEl.style.cssText = "position:fixed;left:0;top:0;z-index:9999;background:#000;color:#0f0;font:11px/1.4 monospace;padding:4px 6px;white-space:pre;pointer-events:none";
+      document.body.appendChild(perfEl);
+    }
+    perfEl.textContent = msg;
+  }
 
   /* ── speech ─────────────────────────────────────── */
   // 每个单词在预取时就建好自己的 Audio 元素，src 只设置这一次。
@@ -698,7 +709,9 @@ body{
   }
 
   function readWord(){
+    var t0 = performance.now();
     stopAll();
+    var t1 = performance.now();
     var L = LESSONS[idx];
     wordActive = true;
 
@@ -716,13 +729,18 @@ body{
       player.playbackRate = slow ? 0.72 : 1;
       player.onended = function(){ if(wordActive) finishWord(); };
       player.onerror = function(){ if(wordActive) finishWord(); };
+      var t2 = performance.now();
       var p = player.play();
+      var t3 = performance.now();
+      perf("stop " + (t1-t0).toFixed(1) + " | setup " + (t2-t1).toFixed(1) + " | play " + (t3-t2).toFixed(1));
       if(p && p.catch){
         p.catch(function(err){
           if(err && err.name === "AbortError") return;
           if(wordActive) finishWord();
         });
       }
+    } else {
+      perf("noaudio");
     }
   }
 
